@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wedding Invitation — Rahul & Toufika</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=EB+Garamond:ital@0;1&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    :root {
+      --crimson: #8B1A1A;
+      --crimson-dark: #5C0F0F;
+      --gold: #C9A96E;
+      --gold-light: #E8D5A3;
+      --cream: #FAF8F5;
+      --ivory: #F5F0E8;
+      --text-dark: #2C1810;
+      --text-mid: #5C3D2E;
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      background: var(--cream);
+      font-family: 'EB Garamond', serif;
+      overflow-x: hidden;
+      color: var(--text-dark)
+    }
+
+    /* Dark intro bg */
+    #curtain-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: var(--crimson-dark);
+      pointer-events: none;
+      transition: opacity 0.9s ease 0.5s
+    }
+
+    #curtain-bg.clear {
+      opacity: 0
+    }
+
+    /* Curtain canvases — fixed, always on top of content */
+    #cv-left {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 80;
+      pointer-events: none
+    }
+
+    #cv-right {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 80;
+      pointer-events: none
+    }
+
+    /* Click overlay — only active before open */
+    #click-catcher {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      cursor: pointer
+    }
+
+    #click-catcher.done {
+      pointer-events: none
+    }
+
+    /* Pelmet — always on top */
+    #pelmet {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 58px;
+      z-index: 100;
+      pointer-events: none
+    }
+
+    /* Wax seal stamp — stuck to curtain seam */
+    #wax-stamp {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-4deg);
+      z-index: 95;
+      cursor: pointer;
+      transition: opacity 0.45s ease, transform 0.45s ease;
+      will-change: transform, opacity;
+    }
+    /* Fabric compression ring — shows stamp is pressing INTO the curtain */
+    
+    #wax-stamp svg {
+      display: block;
+      /* Stamp sits on the fabric — shadow goes DOWN, not outward */
+
+    }
+    #wax-stamp:hover {
+      transform: translate(-50%, -50%) rotate(-4deg) scale(1.03);
+    }
+    #wax-stamp.gone {
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, -50%) rotate(-4deg) scale(0.85);
+    }
+    /* Subtle very-slow sway — like curtain fabric moving slightly under it */
+    @keyframes stampSway {
+      0%   { transform: translate(-50%, -50%) rotate(-4.5deg) translateY(0px); }
+      30%  { transform: translate(-50%, -50%) rotate(-3.8deg) translateY(-1.5px); }
+      70%  { transform: translate(-50%, -50%) rotate(-4.3deg) translateY(1px); }
+      100% { transform: translate(-50%, -50%) rotate(-4.5deg) translateY(0px); }
+    }
+    @keyframes stampPress {
+      0%   { transform: translate(-50%, -50%) rotate(-4deg) scale(1); }
+      35%  { transform: translate(-50%, -50%) rotate(-4deg) scale(0.92); }
+      100% { transform: translate(-50%, -50%) rotate(-4deg) scale(0.92); }
+    }
+    #wax-stamp:not(.gone):not(.pressing) {
+      animation: stampSway 6s ease-in-out infinite;
+    }
+    #wax-stamp.pressing {
+      animation: stampPress 0.28s ease forwards;
+    }
+
+    /* ── INVITATION ── */
+    #invitation {
+      min-height: 100vh;
+      max-width: 480px;
+      margin: 0 auto;
+      padding-top: 58px;
+      padding-left: max(52px, env(safe-area-inset-left));
+      padding-right: max(52px, env(safe-area-inset-right));
+    }
+    @media (min-width: 540px) {
+      #invitation {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .names-section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 16px;
+      position: relative;
+      background: var(--cream);
+      overflow: hidden
+    }
+
+    .names-pre {
+      font-family: 'Cinzel', serif;
+      font-size: .65rem;
+      letter-spacing: .25em;
+      color: var(--crimson);
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeUp .8s ease .3s forwards;
+      text-align: center;
+      line-height: 2
+    }
+
+    .couple-names {
+      text-align: center;
+      opacity: 0;
+      animation: fadeUp 1s ease .6s forwards
+    }
+
+    .name-groom,
+    .name-bride {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 7vw, 3.6rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--text-dark);
+      line-height: 1.05;
+      display: block;
+      letter-spacing: 0.04em;
+      text-shadow: 0 1px 18px rgba(139, 26, 26, 0.13)
+    }
+
+    .name-ampersand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      color: var(--crimson);
+      display: block;
+      margin: 8px 0
+    }
+
+    .invite-text {
+      font-family: 'EB Garamond', serif;
+      font-size: .9rem;
+      line-height: 1.8;
+      text-align: center;
+      color: var(--text-mid);
+      max-width: 280px;
+      margin-top: 36px;
+      opacity: 0;
+      animation: fadeUp 1s ease .9s forwards
+    }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeUp 1s ease 1.4s forwards
+    }
+
+    .scroll-cue span {
+      font-family: 'Cinzel', serif;
+      font-size: .55rem;
+      letter-spacing: .25em;
+      color: var(--crimson);
+      text-transform: uppercase
+    }
+
+    .scroll-arrow {
+      width: 1px;
+      height: 36px;
+      background: var(--crimson);
+      animation: scrollBounce 1.5s ease-in-out infinite
+    }
+
+    @keyframes scrollBounce {
+
+      0%,
+      100% {
+        transform: scaleY(.5);
+        opacity: .4
+      }
+
+      50% {
+        transform: scaleY(1);
+        opacity: 1
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .scratch-section {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      background: #e8ddd0;
+      position: relative;
+      overflow: hidden
+    }
+    #dolna-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    
+      50%  { transform: rotate(7deg); }
+      100% { transform: rotate(-7deg); }
+    }
+
+    .scratch-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      padding: 0 24px;
+    }
+    .invite-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      text-align: center;
+      line-height: 1.8;
+      margin-top: 20px;
+      text-shadow: 0 1px 8px rgba(255,250,245,0.95);
+    }
+    .invite-text strong {
+      color: var(--crimson-dark);
+    }
+    .scratch-overlay .scratch-cards {
+      pointer-events: all;
+    }
+
+    .reveal-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--crimson-dark);
+      margin-bottom: 2px;
+      text-align: center;
+      width: 100%;
+      text-shadow: 0 1px 10px rgba(255,250,245,1), 0 0 20px rgba(255,255,255,0.8);
+    }
+
+    .reveal-sub {
+      font-family: 'Cinzel', serif;
+      font-size: .55rem;
+      letter-spacing: .22em;
+      color: var(--crimson);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      text-align: center;
+      width: 100%;
+      text-shadow: 0 0 12px rgba(255,255,255,0.9);
+    }
+
+    .scratch-cards {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: nowrap;
+      position: relative;
+      z-index: 1
+    }
+
+    .scratch-card {
+      position: relative;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      overflow: hidden;
+      cursor: crosshair;
+      flex-shrink: 0;
+    }
+
+    .scratch-reveal {
+      position: absolute;
+      inset: 0;
+      background: rgba(250,245,238,0.92);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: 1.5px solid var(--gold);
+      backdrop-filter: blur(2px);
+    }
+
+    .scratch-reveal .reveal-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      color: var(--text-dark);
+      line-height: 1
+    }
+
+    .scratch-reveal .reveal-word {
+      font-family: 'Cinzel', serif;
+      font-size: .5rem;
+      letter-spacing: .15em;
+      color: var(--crimson);
+      text-transform: uppercase;
+      margin-top: 2px
+    }
+
+    .scratch-canvas {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      touch-action: none
+    }
+
+    #confetti-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 500;
+      overflow: hidden;
+      display: none
+    }
+
+    .confetti-piece {
+      position: absolute;
+      top: -20px;
+      border-radius: 2px;
+      animation: confettiFall linear forwards
+    }
+
+    @keyframes confettiFall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1
+      }
+
+      100% {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0
+      }
+    }
+
+    
+    
+    
+
+    .scratch-done-msg {
+      position: absolute;
+      bottom: 8%;
+      left: 0; right: 0;
+      padding: 0 24px;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 1s ease 0.5s;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .scratch-done-msg.visible {
+      opacity: 1
+    }
+
+    .venue-section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 32px;
+      background: var(--cream);
+      text-align: center
+    }
+
+    .venue-pre {
+      font-family: 'Cinzel', serif;
+      font-size: .6rem;
+      letter-spacing: .3em;
+      color: var(--crimson);
+      text-transform: uppercase;
+      margin-bottom: 40px
+    }
+
+    .venue-illustration {
+      width: 240px;
+      margin: 0 auto 32px;
+      opacity: .9
+    }
+
+    .venue-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--text-dark);
+      line-height: 1.2;
+      margin-bottom: 12px
+    }
+
+    .venue-address {
+      font-family: 'Cinzel', serif;
+      font-size: .6rem;
+      letter-spacing: .2em;
+      color: var(--text-mid);
+      text-transform: uppercase;
+      line-height: 2;
+      margin-bottom: 8px
+    }
+
+    .venue-date {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--crimson);
+      margin-top: 4px
+    }
+
+    .menu-section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 80px 32px 120px;
+      background: var(--ivory);
+      position: relative;
+      overflow: hidden
+    }
+
+    .menu-card {
+      width: 100%;
+      max-width: 340px;
+      background: var(--cream);
+      position: relative;
+      padding: 56px 32px 48px;
+      text-align: center
+    }
+
+    .bow-svg {
+      width: 100px;
+      margin: 0 auto 24px;
+      display: block
+    }
+
+    .reception-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--text-dark);
+      margin-bottom: 4px
+    }
+
+    .reception-sub {
+      font-family: 'Cinzel', serif;
+      font-size: .55rem;
+      letter-spacing: .25em;
+      color: var(--crimson);
+      text-transform: uppercase;
+      margin-bottom: 36px
+    }
+
+    .menu-course {
+      margin-bottom: 24px
+    }
+
+    .course-title {
+      font-family: 'Cinzel', serif;
+      font-size: .6rem;
+      letter-spacing: .25em;
+      color: var(--crimson);
+      text-transform: uppercase;
+      margin-bottom: 6px
+    }
+
+    .course-items {
+      font-family: 'EB Garamond', serif;
+      font-size: .85rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+      font-style: italic
+    }
+
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: var(--gold);
+      margin: 20px auto
+    }
+
+    .menu-border {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none
+    }
+
+    .footer-section {
+      background: var(--crimson-dark);
+      padding: 48px 32px;
+      text-align: center
+    }
+
+    .footer-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-style: italic;
+      color: var(--gold-light);
+      margin-bottom: 8px
+    }
+
+    .footer-date {
+      font-family: 'Cinzel', serif;
+      font-size: .6rem;
+      letter-spacing: .25em;
+      color: rgba(255, 255, 255, .5);
+      text-transform: uppercase
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="curtain-bg"></div>
+  <div id="click-catcher" class="done"></div>
+  <canvas id="cv-left"></canvas>
+  <canvas id="cv-right"></canvas>
+  <canvas id="cv-left-still"  style="position:fixed;top:0;left:0;z-index:81;pointer-events:none;opacity:0"></canvas>
+  <canvas id="cv-right-still" style="position:fixed;top:0;left:0;z-index:81;pointer-events:none;opacity:0;width:100%"></canvas>
+
+  <!-- Pelmet — fixed gold-trimmed top rod -->
+  <svg id="pelmet" viewBox="0 0 1000 58" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="pg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#350707" />
+        <stop offset="45%" stop-color="#6B1212" />
+        <stop offset="100%" stop-color="#5C0F0F" />
+      </linearGradient>
+      <linearGradient id="pg2" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#7A1515" />
+        <stop offset="100%" stop-color="#5C0F0F" />
+      </linearGradient>
+    </defs>
+    <rect width="1000" height="40" fill="url(#pg)" />
+    <!-- Scalloped valance -->
+    <path
+      d="M0,40 Q20,58 40,40 Q60,22 80,40 Q100,58 120,40 Q140,22 160,40 Q180,58 200,40 Q220,22 240,40 Q260,58 280,40 Q300,22 320,40 Q340,58 360,40 Q380,22 400,40 Q420,58 440,40 Q460,22 480,40 Q500,58 520,40 Q540,22 560,40 Q580,58 600,40 Q620,22 640,40 Q660,58 680,40 Q700,22 720,40 Q740,58 760,40 Q780,22 800,40 Q820,58 840,40 Q860,22 880,40 Q900,58 920,40 Q940,22 960,40 Q980,58 1000,40 L1000,0 L0,0Z"
+      fill="url(#pg2)" />
+    <!-- Gold rope -->
+    <path
+      d="M0,40 Q20,58 40,40 Q60,22 80,40 Q100,58 120,40 Q140,22 160,40 Q180,58 200,40 Q220,22 240,40 Q260,58 280,40 Q300,22 320,40 Q340,58 360,40 Q380,22 400,40 Q420,58 440,40 Q460,22 480,40 Q500,58 520,40 Q540,22 560,40 Q580,58 600,40 Q620,22 640,40 Q660,58 680,40 Q700,22 720,40 Q740,58 760,40 Q780,22 800,40 Q820,58 840,40 Q860,22 880,40 Q900,58 920,40 Q940,22 960,40 Q980,58 1000,40"
+      fill="none" stroke="#C9A96E" stroke-width="2.2" opacity="0.7" />
+    <!-- Top shine -->
+    <rect width="1000" height="2" fill="rgba(255,255,255,0.12)" />
+    <!-- Bottom shadow under pelmet -->
+    <rect y="38" width="1000" height="4" fill="rgba(0,0,0,0.25)" />
+  </svg>
+
+  <!-- Wax Seal Stamp -->
+  <div id="wax-stamp" onclick="this.classList.add('pressing'); setTimeout(openCurtain, 320);">
+    <svg width="210" height="215" viewBox="0 0 210 215" xmlns="http://www.w3.org/2000/svg" style="overflow:hidden;display:block">
+      <defs>
+
+        <!-- === GRADIENTS FOR LAYERED LIGHTING === -->
+
+        <!-- Base wax colour — very dark wine, almost black at edge -->
+        <radialGradient id="g-base" cx="50%" cy="48%" r="55%">
+          <stop offset="0%"   stop-color="#8C1420"/>
+          <stop offset="45%"  stop-color="#6B0E18"/>
+          <stop offset="80%"  stop-color="#420810"/>
+          <stop offset="100%" stop-color="#220308"/>
+        </radialGradient>
+
+        <!-- Raised rim lighting: the thick outer edge catches top-left light -->
+        <!-- Real wax: the rim is raised, so it intercepts light BEFORE the center -->
+        <!-- We fake this: brighter ring at edge fading inward -->
+        <radialGradient id="g-rim-light" cx="35%" cy="30%" r="75%">
+          <stop offset="0%"   stop-color="rgba(0,0,0,0)"/>
+          <stop offset="55%"  stop-color="rgba(0,0,0,0)"/>
+          <stop offset="72%"  stop-color="rgba(160,40,50,0.35)"/>
+          <stop offset="83%"  stop-color="rgba(210,70,70,0.55)"/>
+          <stop offset="90%"  stop-color="rgba(180,50,55,0.30)"/>
+          <stop offset="100%" stop-color="rgba(60,5,10,0.20)"/>
+        </radialGradient>
+
+        <!-- Rim shadow: bottom-right of the raised rim falls INTO shadow -->
+        <radialGradient id="g-rim-shadow" cx="68%" cy="72%" r="60%">
+          <stop offset="0%"   stop-color="rgba(0,0,0,0)"/>
+          <stop offset="50%"  stop-color="rgba(0,0,0,0)"/>
+          <stop offset="72%"  stop-color="rgba(0,0,0,0.25)"/>
+          <stop offset="85%"  stop-color="rgba(0,0,0,0.60)"/>
+          <stop offset="100%" stop-color="rgba(0,0,0,0.50)"/>
+        </radialGradient>
+
+        <!-- Center flat area (where stamp pressed it flat) -->
+        <!-- Slightly darker than the rim because it's recessed -->
+        <radialGradient id="g-center" cx="40%" cy="36%" r="50%">
+          <stop offset="0%"   stop-color="rgba(170,45,55,0.55)"/>
+          <stop offset="50%"  stop-color="rgba(90,15,25,0.30)"/>
+          <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+        </radialGradient>
+
+        <!-- KEY specular: tight bright spot top-left — light glancing off raised rim -->
+        <radialGradient id="g-spec" cx="28%" cy="22%" r="18%">
+          <stop offset="0%"   stop-color="rgba(255,200,185,0.80)"/>
+          <stop offset="45%"  stop-color="rgba(240,130,110,0.30)"/>
+          <stop offset="100%" stop-color="rgba(200,60,50,0)"/>
+        </radialGradient>
+
+        <!-- Secondary softer fill light (bounce from below-right) -->
+        <radialGradient id="g-fill" cx="75%" cy="80%" r="40%">
+          <stop offset="0%"   stop-color="rgba(140,30,40,0.20)"/>
+          <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+        </radialGradient>
+
+        <!-- The thick SIDE of the wax — the wall you see around the edge -->
+        <!-- Lit from top-left: left/top side of wall is lighter, right/bottom darker -->
+        <linearGradient id="g-side" x1="20%" y1="15%" x2="80%" y2="88%">
+          <stop offset="0%"   stop-color="#7A1020"/>
+          <stop offset="35%"  stop-color="#480A14"/>
+          <stop offset="70%"  stop-color="#280508"/>
+          <stop offset="100%" stop-color="#0E0102"/>
+        </linearGradient>
+
+        <!-- Contact shadow: tight, dark, hugs the base -->
+        <filter id="f-contact" x="-25%" y="-20%" width="155%" height="155%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="b"/>
+          <feOffset in="b" dx="3" dy="7" result="s"/>
+          <feColorMatrix in="s" type="matrix"
+            values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.88 0" result="sh"/>
+          <feMerge><feMergeNode in="sh"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+
+        <!-- Inner drop shadow — bounded to SVG, no bleed -->
+        <filter id="innerShadow" x="0%" y="0%" width="115%" height="120%">
+          <feDropShadow dx="3" dy="7" stdDeviation="7"
+                        flood-color="rgba(0,0,0,0.65)"/>
+        </filter>
+
+        <!-- Clip to the organic blob shape -->
+        <clipPath id="c-wax">
+          <path d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"/>
+        </clipPath>
+
+        <!-- Clip to inner embossed area (smaller, centered) -->
+        <clipPath id="c-inner">
+          <circle cx="95" cy="95" r="58"/>
+        </clipPath>
+
+      </defs>
+
+      <!-- ============================================ -->
+      <!-- LAYER 1: WAX THICKNESS — the side wall -->
+      <!-- Offset slightly down+right from top surface = visible side edge -->
+      <g filter="url(#innerShadow)">
+      <path d="M 107,21 C 127,18 150,24 165,41 C 174,51 178,61 180,73 C 182,84 179,93 176,99 C 187,106 189,118 183,128 C 177,139 164,144 157,147 C 160,158 155,168 145,174 C 135,180 122,181 112,178 C 105,184 95,188 84,186 C 72,184 62,177 57,169 C 48,171 37,169 29,161 C 20,153 17,140 21,129 C 14,121 10,110 12,98 C 14,86 21,76 29,70 C 24,60 24,48 32,39 C 40,30 53,26 65,27 C 72,19 82,14 94,14 C 100,14 104,17 107,21 Z"
+            fill="url(#g-side)"/>
+      </g>
+
+      <!-- ============================================ -->
+      <!-- LAYER 2: TOP WAX SURFACE — 5 lighting passes -->
+
+      <!-- 2a. Base colour -->
+      <path d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
+            fill="url(#g-base)"/>
+
+      <!-- 2b. Raised rim lighting — brighter ring around edge where light hits the thick rim -->
+      <path d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
+            fill="url(#g-rim-light)" clip-path="url(#c-wax)"/>
+
+      <!-- 2c. Rim shadow — bottom-right of raised rim in shadow -->
+      <path d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
+            fill="url(#g-rim-shadow)" clip-path="url(#c-wax)"/>
+
+      <!-- 2d. Center diffuse — the flat pressed center area, slight top-left light -->
+      <path d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
+            fill="url(#g-center)" clip-path="url(#c-wax)"/>
+
+      <!-- 2e. Specular highlight — tight glint top-left, where rim is highest + faces light -->
+      <path d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
+            fill="url(#g-spec)" clip-path="url(#c-wax)"/>
+
+      <!-- 2f. Fill light — soft warmth bottom-right, prevents it going pure black -->
+      <path d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
+            fill="url(#g-fill)" clip-path="url(#c-wax)"/>
+
+      <!-- ============================================ -->
+      <!-- LAYER 3: EMBOSSED BORDER RING -->
+      <!-- The groove: stamped INTO the flat center — dark deep trough -->
+      <circle cx="95" cy="95" r="62" fill="none"
+              stroke="rgba(8,0,2,0.90)" stroke-width="8"
+              clip-path="url(#c-wax)"/>
+      <!-- Top-left arc of groove: catches light on its inner raised wall -->
+      <circle cx="95" cy="95" r="62" fill="none"
+              stroke="rgba(190,80,65,0.50)" stroke-width="1.8"
+              stroke-dasharray="110 290"
+              stroke-dashoffset="42"
+              clip-path="url(#c-wax)"/>
+      <!-- Bottom-right groove wall: in shadow -->
+      <circle cx="95" cy="95" r="58" fill="none"
+              stroke="rgba(0,0,0,0.45)" stroke-width="3"
+              stroke-dasharray="160 240"
+              stroke-dashoffset="215"
+              clip-path="url(#c-wax)"/>
+
+      <!-- ============================================ -->
+      <!-- LAYER 4: LETTERS — pressed (recessed) into the wax center -->
+      <!-- Recessed = darker than surface, with top-left highlight on stroke walls -->
+
+      <!-- R shadow (the depth of the pressed groove) -->
+      <text x="92" y="103"
+        font-family="Cormorant Garamond, Georgia, serif"
+        font-size="88" font-style="italic" font-weight="400"
+        fill="rgba(12,1,3,0.88)"
+        text-anchor="middle" dominant-baseline="middle"
+        clip-path="url(#c-inner)">R</text>
+      <!-- R highlight (top-left wall of the groove catches light) -->
+      <text x="90" y="101"
+        font-family="Cormorant Garamond, Georgia, serif"
+        font-size="88" font-style="italic" font-weight="400"
+        fill="rgba(185,75,65,0.30)"
+        text-anchor="middle" dominant-baseline="middle"
+        clip-path="url(#c-inner)">R</text>
+
+      <!-- T shadow -->
+      <text x="110" y="99"
+        font-family="Cormorant Garamond, Georgia, serif"
+        font-size="54" font-style="italic" font-weight="400"
+        fill="rgba(12,1,3,0.82)"
+        text-anchor="middle" dominant-baseline="middle"
+        clip-path="url(#c-inner)">T</text>
+      <!-- T highlight -->
+      <text x="108" y="97"
+        font-family="Cormorant Garamond, Georgia, serif"
+        font-size="54" font-style="italic" font-weight="400"
+        fill="rgba(185,75,65,0.25)"
+        text-anchor="middle" dominant-baseline="middle"
+        clip-path="url(#c-inner)">T</text>
+
+      <!-- ============================================ -->
+      <!-- LAYER 5: SURFACE IMPERFECTIONS -->
+      <!-- Real wax is not smooth — has micro bumps, streaks, trapped air bubbles -->
+      <!-- Top-left: a streak of slightly lighter wax (air bubble trail) -->
+      <ellipse cx="70" cy="58" rx="18" ry="6" transform="rotate(-28 70 58)"
+               fill="rgba(200,80,65,0.08)" clip-path="url(#c-wax)"/>
+      <!-- Bottom-right: slightly darker pooled area -->
+      <ellipse cx="122" cy="132" rx="15" ry="8" transform="rotate(18 122 132)"
+               fill="rgba(0,0,0,0.09)" clip-path="url(#c-wax)"/>
+      <!-- Small bright speck — trapped air bubble at surface -->
+      <ellipse cx="60" cy="72" rx="4" ry="2.5" transform="rotate(-15 60 72)"
+               fill="rgba(255,210,185,0.18)" clip-path="url(#c-wax)"/>
+
+      <!-- ============================================ -->
+      <!-- LAYER 6: OUTER RIM CATCHLIGHT -->
+      <!-- The very top-left edge of the thick wax catches a thin line of bright light -->
+      <!-- This is what makes it look like it has PHYSICAL THICKNESS vs a flat sticker -->
+      <path d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
+            fill="none"
+            stroke="rgba(215,100,80,0.45)" stroke-width="2.5"
+            stroke-dasharray="95 999"
+            stroke-dashoffset="0"
+            clip-path="url(#c-wax)"/>
+
+    </svg>
+  </div>
+
+  <div id="confetti-container"></div>
+
+  <div id="invitation">
+    <section class="names-section">
+      <p class="names-pre">Together with their families<br>cordially invite you to celebrate</p>
+      <div class="couple-names">
+        <span class="name-groom">Fazla Rabbi Rahul</span>
+        <span class="name-ampersand">&amp;</span>
+        <span class="name-bride">Chowdhury Toufika</span>
+      </div>
+      <p class="invite-text">We would like to invite you to celebrate<br>the most special day of our lives.<br>It would
+        be an honor to have you<br>present at this important moment.</p>
+      <div class="scroll-cue"><span></span>
+        <div class="scroll-arrow"></div>
+      </div>
+    </section>
+
+    <section class="scratch-section">
+      <canvas id="dolna-canvas" width="400" height="600" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity 0.5s"></canvas>
+      <div class="scratch-overlay">
+      <p class="invite-text" id="invite-text" style="opacity:0;visibility:hidden;">With hearts full of love and joy,<br>we, <strong>Chowdhury Nasir &amp; Mostary Begum</strong>,<br>warmly invite you to witness the beautiful union of our beloved daughter and cherished son-in-law.</p>
+      <p class="reveal-label">Reveal</p>
+      <p class="reveal-sub">Scratch to discover the date</p>
+      <div class="scratch-cards">
+        <div class="scratch-card" id="card-0">
+          <div class="scratch-reveal"><span class="reveal-number">13</span><span class="reveal-word">Day</span></div>
+          <canvas class="scratch-canvas" id="canvas-0" width="70" height="70"></canvas>
+        </div>
+        <div class="scratch-card" id="card-1">
+          <div class="scratch-reveal"><span class="reveal-number" style="font-size:.85rem">june</span><span
+              class="reveal-word">Month</span></div><canvas class="scratch-canvas" id="canvas-1" width="100"
+            height="100"></canvas>
+        </div>
+        <div class="scratch-card" id="card-2">
+          <div class="scratch-reveal"><span class="reveal-number" style="font-size:.85rem">2026</span><span
+              class="reveal-word">Year</span></div><canvas class="scratch-canvas" id="canvas-2" width="100"
+            height="100"></canvas>
+        </div>
+      </div>
+      <div class="scratch-done-msg" id="scratch-msg"></div>
+      </div>
+    </section>
+
+    <section class="venue-section">
+      <p class="venue-pre">The Celebration Will Take Place At</p>
+      <svg class="venue-illustration" viewBox="0 0 280 210" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#FAF8F5" />
+            <stop offset="100%" stop-color="#F5F0E8" />
+          </linearGradient>
+          <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#F2EDE4" />
+            <stop offset="100%" stop-color="#E8E0D0" />
+          </linearGradient>
+          <linearGradient id="roofG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#2C1810" />
+            <stop offset="100%" stop-color="#5C3D2E" />
+          </linearGradient>
+          <linearGradient id="groundG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#D4C9B0" />
+            <stop offset="100%" stop-color="#C4B898" />
+          </linearGradient>
+        </defs>
+        <rect width="280" height="210" fill="url(#skyG)" />
+        <rect x="0" y="178" width="280" height="32" fill="url(#groundG)" />
+        <ellipse cx="22" cy="145" rx="9" ry="38" fill="#4a6741" opacity="0.75" />
+        <ellipse cx="22" cy="152" rx="7" ry="28" fill="#5a7a50" opacity="0.6" />
+        <rect x="20" y="175" width="4" height="6" fill="#8B7355" rx="1" />
+        <ellipse cx="258" cy="145" rx="9" ry="38" fill="#4a6741" opacity="0.75" />
+        <ellipse cx="258" cy="152" rx="7" ry="28" fill="#5a7a50" opacity="0.6" />
+        <rect x="256" y="175" width="4" height="6" fill="#8B7355" rx="1" />
+        <rect x="36" y="100" width="52" height="80" fill="url(#wallG)" stroke="#2C1810" stroke-width="0.8" />
+        <polygon points="33,100 62,80 91,100" fill="url(#roofG)" stroke="#2C1810" stroke-width="0.8" />
+        <line x1="62" y1="80" x2="62" y2="72" stroke="#8B1A1A" stroke-width="1.5" />
+        <circle cx="62" cy="71" r="2.5" fill="#C9A96E" />
+        <rect x="44" y="113" width="14" height="16" rx="7" fill="none" stroke="#2C1810" stroke-width="0.8" />
+        <rect x="70" y="113" width="14" height="16" rx="7" fill="none" stroke="#2C1810" stroke-width="0.8" />
+        <rect x="44" y="138" width="14" height="16" rx="7" fill="none" stroke="#2C1810" stroke-width="0.8" />
+        <rect x="70" y="138" width="14" height="16" rx="7" fill="none" stroke="#2C1810" stroke-width="0.8" />
+        <rect x="192" y="100" width="52" height="80" fill="url(#wallG)" stroke="#2C1810" stroke-width="0.8" />
+        <polygon points="189,100 218,80 247,100" fill="url(#roofG)" stroke="#2C1810" stroke-width="0.8" />
+        <line x1="218" y1="80" x2="218" y2="72" stroke="#8B1A1A" stroke-width="1.5" />
+        <circle cx="218" cy="71" r="2.5" fill="#C9A96E" />
+        <rect x="200" y="113" width="14" height="16" rx="7" fill="none" stroke="#2C1810" stroke-width="0.8" />
+        <rect x="226" y="113" width="14" height="16" rx="7" fill="none" stroke="#2C1810" stroke-width="0.8" />
+        <rect x="200" y="138" width="14" height="16" rx="7" fill="none" stroke="#2C1810" stroke-width="0.8" />
+        <rect x="226" y="138" width="14" height="16" rx="7" fill="none" stroke="#2C1810" stroke-width="0.8" />
+        <rect x="86" y="88" width="108" height="92" fill="url(#wallG)" stroke="#2C1810" stroke-width="1" />
+        <polygon points="80,88 140,58 200,88" fill="url(#roofG)" stroke="#2C1810" stroke-width="1" />
+        <path d="M92,88 Q140,68 188,88" fill="none" stroke="#C9A96E" stroke-width="0.8" opacity="0.7" />
+        <line x1="140" y1="58" x2="140" y2="46" stroke="#8B1A1A" stroke-width="2" />
+        <circle cx="140" cy="44" r="3.5" fill="#C9A96E" />
+        <rect x="94" y="100" width="18" height="22" rx="9" fill="none" stroke="#2C1810" stroke-width="0.9" />
+        <rect x="119" y="100" width="18" height="22" rx="9" fill="none" stroke="#2C1810" stroke-width="0.9" />
+        <rect x="143" y="100" width="18" height="22" rx="9" fill="none" stroke="#2C1810" stroke-width="0.9" />
+        <rect x="168" y="100" width="18" height="22" rx="9" fill="none" stroke="#2C1810" stroke-width="0.9" />
+        <rect x="86" y="130" width="108" height="6" fill="#E0D8C8" stroke="#2C1810" stroke-width="0.7" />
+        <line x1="96" y1="130" x2="96" y2="136" stroke="#2C1810" stroke-width="0.8" />
+        <line x1="104" y1="130" x2="104" y2="136" stroke="#2C1810" stroke-width="0.8" />
+        <line x1="112" y1="130" x2="112" y2="136" stroke="#2C1810" stroke-width="0.8" />
+        <line x1="120" y1="130" x2="120" y2="136" stroke="#2C1810" stroke-width="0.8" />
+        <line x1="128" y1="130" x2="128" y2="136" stroke="#2C1810" stroke-width="0.8" />
+        <line x1="136" y1="130" x2="136" y2="136" stroke="#2C1810" stroke-width="0.8" />
+        <line x1="144" y1="130" x2="144" y2="136" stroke="#2C1810" stroke-width="0.8" />
+        <line x1="152" y1="130" x2="152" y2="136" stroke="#2C1810" stroke-width="0.8" />
+        <line x1="160" y1="130" x2="160" y2="136" stroke="#2C1810" stroke-width="0.8" />
+        <line x1="168" y1="130" x2="168" y2="136" stroke="#2C1810" stroke-width="0.8" />
+        <line x1="176" y1="130" x2="176" y2="136" stroke="#2C1810" stroke-width="0.8" />
+        <line x1="184" y1="130" x2="184" y2="136" stroke="#2C1810" stroke-width="0.8" />
+        <rect x="118" y="136" width="8" height="44" fill="#EDE5D5" stroke="#2C1810" stroke-width="0.7" />
+        <rect x="154" y="136" width="8" height="44" fill="#EDE5D5" stroke="#2C1810" stroke-width="0.7" />
+        <rect x="115" y="133" width="14" height="4" rx="1" fill="#D4C9B0" stroke="#2C1810" stroke-width="0.6" />
+        <rect x="151" y="133" width="14" height="4" rx="1" fill="#D4C9B0" stroke="#2C1810" stroke-width="0.6" />
+        <path d="M118,158 Q118,136 140,136 Q162,136 162,158" fill="none" stroke="#2C1810" stroke-width="1.2" />
+        <rect x="112" y="130" width="56" height="5" fill="#D4C9B0" stroke="#2C1810" stroke-width="0.7" />
+        <rect x="128" y="155" width="24" height="25" rx="12 12 0 0" fill="#8B1A1A" stroke="#2C1810" stroke-width="0.8"
+          opacity="0.85" />
+        <circle cx="138" cy="170" r="1.5" fill="#C9A96E" />
+        <circle cx="142" cy="170" r="1.5" fill="#C9A96E" />
+        <rect x="94" y="142" width="18" height="20" rx="6" fill="none" stroke="#2C1810" stroke-width="0.9" />
+        <rect x="168" y="142" width="18" height="20" rx="6" fill="none" stroke="#2C1810" stroke-width="0.9" />
+        <rect x="118" y="178" width="44" height="4" rx="1" fill="#D4C9B0" stroke="#2C1810" stroke-width="0.6" />
+        <rect x="112" y="182" width="56" height="4" rx="1" fill="#C4B898" stroke="#2C1810" stroke-width="0.6" />
+        <rect x="106" y="186" width="68" height="4" rx="1" fill="#B8AA88" stroke="#2C1810" stroke-width="0.6" />
+        <path d="M115,210 Q130,190 140,186 Q150,190 165,210Z" fill="#C4B898" opacity="0.6" />
+        <rect x="36" y="190" width="208" height="4" rx="1" fill="#C4B898" stroke="#2C1810" stroke-width="0.6" />
+        <rect x="36" y="184" width="5" height="10" rx="1" fill="#D4C9B0" stroke="#2C1810" stroke-width="0.6" />
+        <rect x="239" y="184" width="5" height="10" rx="1" fill="#D4C9B0" stroke="#2C1810" stroke-width="0.6" />
+        <ellipse cx="50" cy="188" rx="7" ry="5" fill="#5a7a50" opacity="0.55" />
+        <ellipse cx="70" cy="188" rx="6" ry="4" fill="#4a6741" opacity="0.5" />
+        <ellipse cx="210" cy="188" rx="6" ry="4" fill="#4a6741" opacity="0.5" />
+        <ellipse cx="230" cy="188" rx="7" ry="5" fill="#5a7a50" opacity="0.55" />
+      </svg>
+      <h2 class="venue-name">Rongdhonu Convention Center</h2>
+      <p class="venue-address">Road-01, Block-A, Section-12<br>Pallabi, Mirpur, Dhaka-1216</p>
+      <p class="venue-date">June 13, 2026</p>
+    </section>
+
+    <section class="menu-section">
+      <div class="menu-card">
+        <svg class="menu-border" viewBox="0 0 340 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M10,10 Q20,4 30,10 Q40,16 50,10 Q60,4 70,10 Q80,16 90,10 Q100,4 110,10 Q120,16 130,10 Q140,4 150,10 Q160,16 170,10 Q180,4 190,10 Q200,16 210,10 Q220,4 230,10 Q240,16 250,10 Q260,4 270,10 Q280,16 290,10 Q300,4 310,10 Q320,16 330,10 L330,490 Q320,496 310,490 Q300,484 290,490 Q280,496 270,490 Q260,484 250,490 Q240,496 230,490 Q220,484 210,490 Q200,496 190,490 Q180,484 170,490 Q160,496 150,490 Q140,484 130,490 Q120,496 110,490 Q100,484 90,490 Q80,496 70,490 Q60,484 50,490 Q40,496 30,490 Q20,484 10,490 L10,10"
+            fill="none" stroke="#8B1A1A" stroke-width="1.5" opacity="0.4" />
+        </svg>
+        <svg class="bow-svg" viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50,30 Q30,5 10,15 Q0,20 5,30 Q10,42 30,38 Z" fill="none" stroke="#8B1A1A" stroke-width="1.5" />
+          <path d="M50,30 Q70,5 90,15 Q100,20 95,30 Q90,42 70,38 Z" fill="none" stroke="#8B1A1A" stroke-width="1.5" />
+          <ellipse cx="50" cy="30" rx="7" ry="6" fill="none" stroke="#8B1A1A" stroke-width="1.5" />
+          <path d="M46,34 Q35,50 25,58" fill="none" stroke="#8B1A1A" stroke-width="1.5" />
+          <path d="M54,34 Q65,50 75,58" fill="none" stroke="#8B1A1A" stroke-width="1.5" />
+        </svg>
+        <h3 class="reception-title">Wedding to Follow</h3>
+        <p class="reception-sub">Evening Celebration</p>
+        <div class="divider"></div>
+        <div class="menu-course">
+          <p class="course-title">In the Name of Allah</p>
+          <p class="course-items">The most Gracious<br>The most Merciful</p>
+        </div>
+        <div class="divider"></div>
+        <div class="menu-course">
+          <p class="course-title">Dress Code</p>
+          <p class="course-items">Anything Traditional<br>Except Colour RED</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer-section">
+      <p class="footer-names">Rahul &amp; Toufika</p>
+      <p class="footer-date">June 13, 2026 · Rongdhonu Convention Center</p>
+    </footer>
+  </div>
+
+  <script>
+    // ════════════════════════════════════════════════════════════════════
+    // VERLET CLOTH SIMULATION — realistic curtain physics
+    // ════════════════════════════════════════════════════════════════════
+    // Architecture:
+    //  - Two canvases fixed left/right, always visible across ALL pages
+    //  - Each canvas = one curtain panel = grid of Verlet point masses
+    //  - Top row pinned to pelmet rod; opening slides pins sideways
+    //  - Gravity + damping + constraint iterations = organic settle
+    //  - Rendering: per-quad shading using surface normal for fold depth
+    //  - Micro wind noise: random impulses keep fabric gently alive
+    // ════════════════════════════════════════════════════════════════════
+
+    const COLS = 18;   // horizontal mesh resolution
+    const ROWS = 28;   // vertical mesh resolution — more = better drape
+    const GRAVITY = 0.28;
+    const DAMPING = 0.991;  // close to 1 = fabric retains momentum longer
+    const ITERS = 12;     // constraint solve iterations per frame
+    const PELMET_H = 56;    // pixels, must match SVG height
+    const PANEL_FRAC_CLOSED = 0.52;  // fraction of screen width each — must be >=0.5 to avoid center gap panel covers when closed
+    const PANEL_FRAC_OPEN = Math.min(0.165, 52 / window.innerWidth); // fraction when fully gathered to side — max 52px on mobile
+
+    let W = window.innerWidth;
+    let H = window.innerHeight;
+
+    const cvL = document.getElementById('cv-left');
+    const cvR  = document.getElementById('cv-right');
+    const cvLS = document.getElementById('cv-left-still');
+    const cvRS = document.getElementById('cv-right-still');
+    const ctxL  = cvL.getContext('2d');
+    const ctxR  = cvR.getContext('2d');
+    const ctxLS = cvLS.getContext('2d');
+    const ctxRS = cvRS.getContext('2d');
+
+    function resize() {
+      W = window.innerWidth;
+      H = window.innerHeight;
+      const pw = Math.ceil(W * (PANEL_FRAC_CLOSED + 0.04));
+      // Left canvas: panel width only (left-anchored)
+      cvL.width = pw; cvL.height = H;
+      cvL.style.width = pw + 'px'; cvL.style.height = H + 'px';
+      // Right canvas: full width so inner edge reaches center (left-anchored)
+      cvR.width = W; cvR.height = H;
+      cvR.style.width = W + 'px'; cvR.style.height = H + 'px';
+    }
+    resize();
+    window.addEventListener('resize', () => { resize(); buildCloths(); });
+
+    // ── Verlet point ────────────────────────────────────────────────
+    function makePt(x, y, pin) {
+      return { x, y, ox: x, oy: y, pin, fx: 0, fy: 0 };
+    }
+
+    function stepPt(p) {
+      if (p.pin) return;
+      const vx = (p.x - p.ox) * DAMPING;
+      const vy = (p.y - p.oy) * DAMPING;
+      p.ox = p.x; p.oy = p.y;
+      p.x += vx + p.fx;
+      p.y += vy + p.fy + GRAVITY;
+      p.fx = 0; p.fy = 0;
+      // Floor + gentle bounce
+      if (p.y > H - 2) { p.y = H - 2; p.oy = p.y + (p.oy - p.y) * 0.3; }
+    }
+
+    // ── Distance constraint ─────────────────────────────────────────
+    function makeLink(a, b) {
+      return { a, b, rest: Math.hypot(b.x - a.x, b.y - a.y) };
+    }
+
+    function solveLink(lk) {
+      const dx = lk.b.x - lk.a.x, dy = lk.b.y - lk.a.y;
+      const d = Math.hypot(dx, dy) || 1e-9;
+      const f = (d - lk.rest) / d * 0.5;
+      const cx = dx * f, cy = dy * f;
+      if (!lk.a.pin) { lk.a.x += cx; lk.a.y += cy; }
+      if (!lk.b.pin) { lk.b.x -= cx; lk.b.y -= cy; }
+    }
+
+    // ── Cloth object ────────────────────────────────────────────────
+    class Cloth {
+      constructor(isLeft) {
+        this.isLeft = isLeft;
+        this.openP = 0;   // 0 = fully closed, 1 = fully gathered
+        this.pts = [];
+        this.links = [];
+        this.windT = Math.random() * 100;
+        this.build();
+      }
+
+      // World-space x of column c when openP = p
+      targetX(c, p) {
+        const tc = c / (COLS - 1);   // 0 = wall edge, 1 = centre edge
+        const cw = W * PANEL_FRAC_CLOSED;
+        const ow = W * PANEL_FRAC_OPEN;
+        const w = cw + (ow - cw) * p;
+        // Left panel: wall at x=0, centre edge at x=w
+        // Right panel: wall at x=cvWidth, centre at x=cvWidth-w
+        return this.isLeft ? tc * w : W - tc * w;
+      }
+
+      build() {
+        this.pts = []; this.links = [];
+        for (let r = 0; r < ROWS; r++) {
+          for (let c = 0; c < COLS; c++) {
+            const tr = r / (ROWS - 1);
+            const x = this.targetX(c, 0);
+            const y = PELMET_H + tr * (H - PELMET_H - 8);
+            this.pts.push(makePt(x, y, r === 0));
+          }
+        }
+        // Structural: horizontal + vertical
+        for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+          const i = r * COLS + c;
+          if (c < COLS - 1) this.links.push(makeLink(this.pts[i], this.pts[i + 1]));
+          if (r < ROWS - 1) this.links.push(makeLink(this.pts[i], this.pts[i + COLS]));
+        }
+        // Shear diagonals (resist skewing)
+        for (let r = 0; r < ROWS - 1; r++) for (let c = 0; c < COLS - 1; c++) {
+          const i = r * COLS + c;
+          this.links.push(makeLink(this.pts[i], this.pts[i + COLS + 1]));
+          this.links.push(makeLink(this.pts[i + 1], this.pts[i + COLS]));
+        }
+        // Bend resistance (skip-1 = stiffer fabric feel)
+        for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS - 2; c++)
+          this.links.push(makeLink(this.pts[r * COLS + c], this.pts[r * COLS + c + 2]));
+        for (let r = 0; r < ROWS - 2; r++) for (let c = 0; c < COLS; c++)
+          this.links.push(makeLink(this.pts[r * COLS + c], this.pts[(r + 2) * COLS + c]));
+      }
+
+      update() {
+        this.windT += 0.018;
+
+        // Slide top pins toward target position for current openP
+        for (let c = 0; c < COLS; c++) {
+          const p = this.pts[c];
+          const tx = this.targetX(c, this.openP);
+          // Pins slide by lerping — gives the "pulled from centre" feel
+          // Outer pins (near wall) lag behind inner pins = natural gather
+          const lagFactor = this.isLeft
+            ? 1 - (c / (COLS - 1)) * 0.55   // wall col moves least
+            : 1 - (1 - c / (COLS - 1)) * 0.55;
+          p.x += (tx - p.x) * 0.065 * lagFactor;
+          p.y = PELMET_H;
+          p.ox = p.x; p.oy = p.y;
+        }
+
+        // Horizontal gather force on non-pinned rows
+        // Decays with row (lower fabric hangs freer)
+        if (this.openP > 0) {
+          for (let r = 1; r < ROWS; r++) {
+            const rowDecay = 1 - (r / (ROWS - 1)) * 0.72;  // upper rows pulled more
+            for (let c = 0; c < COLS; c++) {
+              const pt = this.pts[r * COLS + c];
+              const tx = this.targetX(c, this.openP);
+              const cx = this.targetX(c, 0);
+              const force = (tx - cx) * this.openP * 0.009 * rowDecay;
+              pt.fx += force;
+            }
+          }
+        }
+
+        // Micro wind — only during opening animation, not after settled
+        if (this.openP > 0.5 && this.openP < 0.98) {
+          for (let r = 2; r < ROWS; r++) {
+            for (let c = 0; c < COLS; c++) {
+              const pt = this.pts[r * COLS + c];
+              const phase = this.windT + r * 0.18 + c * 0.25;
+              const windX = Math.sin(phase * 1.3) * Math.cos(phase * 0.7) * 0.06;
+              const windY = Math.sin(phase * 0.9 + 1.1) * 0.03;
+              pt.fx += windX; pt.fy += windY;
+            }
+          }
+        }
+
+        for (const pt of this.pts) stepPt(pt);
+        for (let i = 0; i < ITERS; i++) for (const lk of this.links) solveLink(lk);
+      }
+
+      draw(ctx) {
+        const cw = ctx.canvas.width, ch = ctx.canvas.height;
+        ctx.clearRect(0, 0, cw, ch);
+
+        // ── Fabric quads ──────────────────────────────────────────
+        for (let r = 0; r < ROWS - 1; r++) {
+          for (let c = 0; c < COLS - 1; c++) {
+            const tl = this.pts[r * COLS + c];
+            const tr = this.pts[r * COLS + c + 1];
+            const bl = this.pts[(r + 1) * COLS + c];
+            const br = this.pts[(r + 1) * COLS + c + 1];
+
+            const tc = (c + 0.5) / COLS;
+            const fold = Math.sin(tc * Math.PI * 7) * 0.13
+              + Math.sin(tc * Math.PI * 3) * 0.08;
+            // Deep rich red — hue 350, sat 75%, lightness 22%–38%
+            const L = Math.round(28 + fold * 12);
+            const Ld = Math.max(18, L - 8);
+            const mid_col = `hsl(350,75%,${L}%)`;
+            const edge_dark = `hsl(350,70%,${Ld}%)`;
+            const grad = ctx.createLinearGradient(tl.x, 0, tr.x, 0);
+            grad.addColorStop(0, edge_dark);
+            grad.addColorStop(0.5, mid_col);
+            grad.addColorStop(1, `hsl(350,72%,${Math.max(20, L - 4)}%)`);
+
+            ctx.beginPath();
+            ctx.moveTo(tl.x, tl.y);
+            ctx.lineTo(tr.x, tr.y);
+            ctx.lineTo(br.x, br.y);
+            ctx.lineTo(bl.x, bl.y);
+            ctx.closePath();
+            ctx.fillStyle = grad;
+            ctx.fill();
+          }
+        }
+
+        // ── Fine fold highlight threads ──────────────────────────
+        ctx.save();
+        ctx.globalAlpha = 0.055;
+        ctx.strokeStyle = '#ffddcc';
+        ctx.lineWidth = 1;
+        for (let c = 1; c < COLS; c += 2) {
+          ctx.beginPath();
+          for (let r = 0; r < ROWS; r++) {
+            const p = this.pts[r * COLS + c];
+            r === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
+          }
+          ctx.stroke();
+        }
+        ctx.restore();
+
+        // ── Inner-edge vignette shadow (where panels meet) ───────
+        {
+          const edgeCol = this.isLeft ? COLS - 1 : 0;
+          const sw = 28;
+          for (let r = 0; r < ROWS - 1; r++) {
+            const p0 = this.pts[r * COLS + edgeCol];
+            const p1 = this.pts[(r + 1) * COLS + edgeCol];
+            const x0 = this.isLeft ? p0.x - sw : p0.x;
+            const g = ctx.createLinearGradient(x0, 0, x0 + sw, 0);
+            g.addColorStop(this.isLeft ? 0 : 1, 'rgba(0,0,0,0.42)');
+            g.addColorStop(this.isLeft ? 1 : 0, 'rgba(0,0,0,0)');
+            ctx.fillStyle = g;
+            ctx.fillRect(x0, p0.y, sw, p1.y - p0.y + 1);
+          }
+        }
+
+        // ── Tieback rope + knot + fringe ─────────────────────────
+        if (this.openP > 0.15) {
+          const alpha = Math.min(1, (this.openP - 0.15) / 0.25);
+          const ow = W * PANEL_FRAC_OPEN * this.openP;
+          const tieY = PELMET_H + (H - PELMET_H) * 0.38;
+          const tieX = this.isLeft
+            ? ow * 0.55
+            : cw - ow * 0.55;
+          const wallX = this.isLeft ? 0 : cw;
+
+          ctx.save();
+          ctx.globalAlpha = alpha;
+
+          // Rope curve (two arcs = figure-8 loop feel)
+          ctx.lineWidth = 3; ctx.lineCap = 'round';
+          ctx.strokeStyle = '#D4AA6E';
+          ctx.beginPath();
+          ctx.moveTo(wallX, tieY - 22);
+          ctx.bezierCurveTo(
+            tieX + (this.isLeft ? -20 : 20), tieY - 10,
+            tieX + (this.isLeft ? -10 : 10), tieY - 2,
+            tieX, tieY
+          );
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(tieX, tieY);
+          ctx.bezierCurveTo(
+            tieX + (this.isLeft ? -10 : 10), tieY + 2,
+            tieX + (this.isLeft ? -20 : 20), tieY + 10,
+            wallX, tieY + 22
+          );
+          ctx.stroke();
+
+          // Knot
+          ctx.beginPath(); ctx.arc(tieX, tieY, 11, 0, Math.PI * 2);
+          ctx.fillStyle = '#2A0505'; ctx.fill();
+          ctx.beginPath(); ctx.arc(tieX, tieY, 8, 0, Math.PI * 2);
+          ctx.fillStyle = '#C9A96E'; ctx.fill();
+          ctx.beginPath(); ctx.arc(tieX, tieY, 4, 0, Math.PI * 2);
+          ctx.fillStyle = '#7B0E0E'; ctx.fill();
+
+          // Tassel fringe below knot
+          for (let i = -6; i <= 6; i++) {
+            const fx = tieX + i * 2.8;
+            const len = 22 + Math.abs(i) * 2.2;
+            ctx.beginPath();
+            ctx.moveTo(fx, tieY + 10);
+            ctx.lineTo(fx + Math.sin(i * 1.1 + this.windT) * 1.5, tieY + 10 + len);
+            ctx.strokeStyle = `rgba(195,152,68,0.72)`;
+            ctx.lineWidth = 1.3;
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+
+        // ── Bottom tassel (swings with fabric) ───────────────────
+        {
+          const r = ROWS - 1;
+          // Use 3 centre points for average bottom position
+          const midC = Math.round((COLS - 1) * (this.isLeft ? 0.60 : 0.40));
+          const bp = this.pts[r * COLS + midC];
+          const bx = bp.x, by = bp.y;
+
+          ctx.save();
+          // Body
+          ctx.beginPath();
+          ctx.ellipse(bx, by - 5, 16, 7, 0, 0, Math.PI * 2);
+          ctx.fillStyle = '#3A0808'; ctx.fill();
+          // Threads
+          for (let i = -6; i <= 6; i++) {
+            const tx = bx + i * 2.5;
+            const swing = Math.sin(this.windT * 0.8 + i * 0.4) * 2.5;
+            ctx.beginPath();
+            ctx.moveTo(tx, by + 2);
+            ctx.lineTo(tx + swing, by + 20 + Math.abs(i) * 2);
+            ctx.strokeStyle = '#C9A96E';
+            ctx.lineWidth = 1.2;
+            ctx.globalAlpha = 0.78;
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+      }
+    }
+
+    // ── Build and run simulation ─────────────────────────────────────
+    let cL, cR;
+    function buildCloths() { cL = new Cloth(true); cR = new Cloth(false); }
+    buildCloths();
+
+    let isOpen = false;
+    let isFrozen = false;  // once true, skip physics and draw static curtain
+    let openP = 0, openV = 0;
+
+    // ── Static curtain draw — no physics, beautiful gathered drape ───
+    function drawStaticCurtain(ctx, isLeft, jiggleT = 0) {
+      const cw = ctx.canvas.width, ch = ctx.canvas.height;
+      ctx.clearRect(0, 0, cw, ch);
+
+      const ow = W * PANEL_FRAC_OPEN;  // gathered width
+      const ph = PELMET_H;
+
+      // Panel hangs from wall side, gathered inward
+      // wallX = edge fixed to wall, gatherX = gathered inner edge
+      const wallX = isLeft ? 0 : cw;
+      const gatherX = isLeft ? ow : cw - ow;
+
+      // ── Draw fabric as a series of vertical fold columns ──────────
+      const FCOLS = 22;  // fold resolution
+      const FROWS = 36;  // vertical resolution
+
+      // For each column compute x with natural gather S-curve folds
+      function colX(c, row) {
+        const tc = c / (FCOLS - 1);  // 0=wall, 1=inner
+        // Base horizontal position — fabric gathers toward wall
+        const base = isLeft
+          ? gatherX + (wallX - gatherX) * tc * tc  // curves toward wall
+          : gatherX + (wallX - gatherX) * tc * tc;
+
+        // Vertical drape: lower rows swing slightly inward (gravity pull)
+        const tr = row / (FROWS - 1);
+        const dropSwing = isLeft ? tc * tr * 18 : -tc * tr * 18;
+
+        // Fold undulation — multiple harmonics for realism
+        const foldAmp = ow * 0.13 * (1 - tc * 0.5);  // wall side folds tighter
+        const fold = Math.sin(tc * Math.PI * 5.5 + 0.4) * foldAmp * 0.7
+          + Math.sin(tc * Math.PI * 2.8 - 0.9) * foldAmp * 0.4
+          + Math.sin(tc * Math.PI * 1.2 + 1.8) * foldAmp * 0.25;
+
+        // Gentle jiggle — very slow sine sway, only bottom half moves
+        const jiggle = Math.sin(jiggleT + tr * 2.2) * Math.sin(jiggleT * 0.5 + tc * 1.8) * 2.8 * tr;
+
+        return base + fold + dropSwing + jiggle;
+      }
+
+      function colY(c, row) {
+        const tc = c / (FCOLS - 1);
+        const tr = row / (FROWS - 1);
+        // Fabric sags slightly in the middle (catenary)
+        const sag = Math.sin(tc * Math.PI) * 22 * tr;
+        return ph + tr * (ch - ph - 4) + sag;
+      }
+
+      // Draw quads
+      for (let r = 0; r < FROWS - 1; r++) {
+        for (let c = 0; c < FCOLS - 1; c++) {
+          const tlx = colX(c, r), tly = colY(c, r);
+          const trx = colX(c + 1, r), try_ = colY(c + 1, r);
+          const blx = colX(c, r + 1), bly = colY(c, r + 1);
+          const brx = colX(c + 1, r + 1), bry = colY(c + 1, r + 1);
+
+          const tc2 = (c + 0.5) / FCOLS;
+          const fold2 = Math.sin(tc2 * Math.PI * 7) * 0.13
+            + Math.sin(tc2 * Math.PI * 3) * 0.08;
+          const L2 = Math.round(28 + fold2 * 12);
+          const Ld2 = Math.max(18, L2 - 8);
+          const grad = ctx.createLinearGradient(tlx, 0, trx, 0);
+          grad.addColorStop(0, `hsl(350,70%,${Ld2}%)`);
+          grad.addColorStop(0.5, `hsl(350,75%,${L2}%)`);
+          grad.addColorStop(1, `hsl(350,72%,${Math.max(20, L2 - 4)}%)`);
+
+          ctx.beginPath();
+          ctx.moveTo(tlx, tly); ctx.lineTo(trx, try_);
+          ctx.lineTo(brx, bry); ctx.lineTo(blx, bly);
+          ctx.closePath();
+          ctx.fillStyle = grad;
+          ctx.fill();
+        }
+      }
+
+      // ── Fine fold highlight threads ──────────────────────────────
+      ctx.save();
+      ctx.globalAlpha = 0.05;
+      ctx.strokeStyle = '#ffddcc';
+      ctx.lineWidth = 1;
+      for (let c = 1; c < FCOLS; c += 2) {
+        ctx.beginPath();
+        for (let r = 0; r < FROWS; r++) {
+          const x = colX(c, r), y = colY(c, r);
+          r === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // ── Inner edge shadow ────────────────────────────────────────
+      {
+        const sw = 32;
+        for (let r = 0; r < FROWS - 1; r++) {
+          const y0 = colY(0, r), y1 = colY(0, r + 1);
+          const ex = isLeft ? colX(FCOLS - 1, r) : colX(0, r);
+          const x0 = isLeft ? ex - sw : ex;
+          const g = ctx.createLinearGradient(x0, 0, x0 + sw, 0);
+          g.addColorStop(isLeft ? 0 : 1, 'rgba(0,0,0,0.45)');
+          g.addColorStop(isLeft ? 1 : 0, 'rgba(0,0,0,0)');
+          ctx.fillStyle = g;
+          ctx.fillRect(x0, y0, sw, y1 - y0 + 1);
+        }
+      }
+
+      // ── Tieback rope + knot + fringe ────────────────────────────
+      {
+        const tieY = ph + (ch - ph) * 0.38;
+        const tieX = isLeft ? ow * 0.52 : cw - ow * 0.52;
+        const wX = isLeft ? 0 : cw;
+
+        ctx.save();
+        ctx.globalAlpha = 1;
+
+        // Rope curve
+        ctx.lineWidth = 3; ctx.lineCap = 'round';
+        ctx.strokeStyle = '#D4AA6E';
+        ctx.beginPath();
+        ctx.moveTo(wX, tieY - 22);
+        ctx.bezierCurveTo(tieX + (isLeft ? -20 : 20), tieY - 10, tieX + (isLeft ? -10 : 10), tieY - 2, tieX, tieY);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(tieX, tieY);
+        ctx.bezierCurveTo(tieX + (isLeft ? -10 : 10), tieY + 2, tieX + (isLeft ? -20 : 20), tieY + 10, wX, tieY + 22);
+        ctx.stroke();
+
+        // Knot
+        ctx.beginPath(); ctx.arc(tieX, tieY, 11, 0, Math.PI * 2);
+        ctx.fillStyle = '#4A0808'; ctx.fill();
+        ctx.beginPath(); ctx.arc(tieX, tieY, 8, 0, Math.PI * 2);
+        ctx.fillStyle = '#C9A96E'; ctx.fill();
+        ctx.beginPath(); ctx.arc(tieX, tieY, 4, 0, Math.PI * 2);
+        ctx.fillStyle = '#B91212'; ctx.fill();
+
+        // Tassel fringe below knot — static, no swing
+        for (let i = -6; i <= 6; i++) {
+          const fx = tieX + i * 2.8;
+          const len = 22 + Math.abs(i) * 2.2;
+          ctx.beginPath();
+          ctx.moveTo(fx, tieY + 10);
+          ctx.lineTo(fx + Math.sin(i * 1.1) * 1.2, tieY + 10 + len);
+          ctx.strokeStyle = 'rgba(195,152,68,0.75)';
+          ctx.lineWidth = 1.3;
+          ctx.stroke();
+        }
+
+        ctx.restore();
+      }
+
+      // ── Bottom tassel — static ───────────────────────────────────
+      {
+        const bx = isLeft ? ow * 0.62 : cw - ow * 0.62;
+        const by = ch - 60;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.ellipse(bx, by - 5, 16, 7, 0, 0, Math.PI * 2);
+        ctx.fillStyle = '#4A0808'; ctx.fill();
+        for (let i = -6; i <= 6; i++) {
+          const tx = bx + i * 2.5;
+          ctx.beginPath();
+          ctx.moveTo(tx, by + 2);
+          ctx.lineTo(tx + Math.sin(i * 0.4) * 1.5, by + 20 + Math.abs(i) * 2);
+          ctx.strokeStyle = '#C9A96E';
+          ctx.lineWidth = 1.2;
+          ctx.globalAlpha = 0.8;
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+    }
+
+    // Draw the stamp impression on the curtain surface
+    // Stamp impression removed
+
+    function loop() {
+      if (isFrozen) return;  // static — no more rAF
+
+      const target = isOpen ? 1 : 0;
+      const stiffness = 0.006, damp = 0.92;
+      openV += (target - openP) * stiffness;
+      openV *= damp;
+      openP = Math.min(1, Math.max(0, openP + openV));
+
+      cL.openP = openP;
+      cR.openP = openP;
+
+      cL.update(); cR.update();
+      cL.draw(ctxL); cR.draw(ctxR);
+
+
+      // Once fully open and spring settled, freeze to static draw
+      if (isOpen && openP > 0.995 && Math.abs(openV) < 0.0002) {
+        isFrozen = true;
+        const gatheredW = Math.ceil(W * (PANEL_FRAC_OPEN + 0.02));
+        // Size still canvases to match physics canvases
+        cvLS.width = gatheredW; cvLS.height = H;
+        cvLS.style.width = gatheredW + 'px'; cvLS.style.height = H + 'px';
+        cvRS.width = W; cvRS.height = H;
+        cvRS.style.width = W + 'px'; cvRS.style.height = H + 'px';
+        // Also shrink physics canvases to gathered width
+        cvL.width = gatheredW; cvL.style.width = gatheredW + 'px';
+        cvR.width = W; cvR.style.width = W + 'px';
+
+        let jiggleT = 0;
+        // Draw first frame before fade starts
+        drawStaticCurtain(ctxLS, true, jiggleT);
+        drawStaticCurtain(ctxRS, false, jiggleT);
+        drawStaticCurtain(ctxL, true, jiggleT);
+        drawStaticCurtain(ctxR, false, jiggleT);
+
+        const FADE_MS = 1800;
+        let fadeStart = null;
+        function fadeStep(ts) {
+          if (!fadeStart) fadeStart = ts;
+          const t = Math.min((ts - fadeStart) / FADE_MS, 1);
+          const ease = t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2;
+          cvLS.style.opacity = ease.toFixed(4);
+          cvRS.style.opacity = ease.toFixed(4);
+          cvL.style.opacity  = (1-ease).toFixed(4);
+          cvR.style.opacity  = (1-ease).toFixed(4);
+          jiggleT += 0.007;
+          drawStaticCurtain(ctxLS, true, jiggleT);
+          drawStaticCurtain(ctxRS, false, jiggleT);
+          drawStaticCurtain(ctxL, true, jiggleT);
+          drawStaticCurtain(ctxR, false, jiggleT);
+          if (t < 1) {
+            requestAnimationFrame(fadeStep);
+          } else {
+            cvL.style.display = 'none';
+            cvR.style.display = 'none';
+            // Switch to absolute so still curtains don't cover footer when scrolling
+            cvLS.style.position = 'absolute';
+            cvRS.style.position = 'absolute';
+            cvLS.style.height = cvRS.style.height = H + 'px';
+            // Shrink still canvases to gathered width so they don't cover center content on mobile
+            const gw = Math.ceil(W * (PANEL_FRAC_OPEN + 0.02));
+            cvLS.width = gw; cvLS.style.width = gw + 'px';
+            cvLS.style.left = '0px';
+            cvRS.width = gw; cvRS.style.width = gw + 'px';
+            cvRS.style.left = (W - gw) + 'px';
+            (function jiggleLoop() {
+              jiggleT += 0.007;
+              drawStaticCurtain(ctxLS, true, jiggleT);
+              drawStaticCurtain(ctxRS, false, jiggleT);
+              requestAnimationFrame(jiggleLoop);
+            })();
+          }
+        }
+        requestAnimationFrame(() => requestAnimationFrame(fadeStep));
+        return;
+      }
+
+      requestAnimationFrame(loop);
+    }
+    loop();
+
+    function openCurtain() {
+      if (isOpen) return;
+      isOpen = true;
+      document.getElementById('curtain-bg').classList.add('clear');
+      document.getElementById('wax-stamp').classList.add('gone');
+      document.getElementById('click-catcher').classList.add('done');
+    }
+
+    // ── Scratch cards ────────────────────────────────────────────────
+    const sc = [false, false, false];
+    function initScratch(i) {
+      const cv = document.getElementById('canvas-' + i);
+      // Match canvas resolution to actual display size
+      const size = 70;
+      cv.width = size; cv.height = size;
+      const c = cv.getContext('2d');
+      const cx = size / 2, cy = size / 2, r = size / 2;
+      // Solid base — fills entire canvas edge to edge
+      c.fillStyle = '#B8923A';
+      c.fillRect(0, 0, size, size);
+      // Clip to circle
+      c.save(); c.beginPath(); c.arc(cx, cy, r, 0, Math.PI*2); c.clip();
+      // Gradient shimmer
+      const g = c.createRadialGradient(cx*0.7, cy*0.7, 2, cx, cy, r);
+      g.addColorStop(0, '#F0E0A0'); g.addColorStop(0.3, '#D4AA55');
+      g.addColorStop(0.7, '#B8923A'); g.addColorStop(1, '#8A6820');
+      c.fillStyle = g; c.fillRect(0, 0, size, size);
+      // Shine lines
+      c.strokeStyle = 'rgba(255,255,255,0.25)'; c.lineWidth = 1.5;
+      for (let j = 0; j < 8; j++) { const a = j/8*Math.PI*2; c.beginPath(); c.moveTo(cx,cy); c.lineTo(cx+Math.cos(a)*(r-4), cy+Math.sin(a)*(r-4)); c.stroke(); }
+      c.restore();
+      c.globalCompositeOperation = 'destination-out';
+      let dr = false, cl = false;
+      const pos = e => {
+        const r = cv.getBoundingClientRect(), sx = cv.width / r.width, sy = cv.height / r.height;
+        return { x: ((e.touches ? e.touches[0].clientX : e.clientX) - r.left) * sx, y: ((e.touches ? e.touches[0].clientY : e.clientY) - r.top) * sy };
+      };
+      const scratch = e => {
+        if (!dr) return; e.preventDefault();
+        const p = pos(e); c.beginPath(); c.arc(p.x, p.y, size*0.16, 0, Math.PI * 2); c.fill();
+        if (!cl) { const d = c.getImageData(0, 0, size, size).data; let k = 0; for (let j = 3; j < d.length; j += 4)if (d[j] === 0) k++; if (k / (d.length / 4) > 0.55) { cl = true; cv.style.transition = 'opacity 0.6s'; cv.style.opacity = '0'; cv.style.pointerEvents = 'none'; sc[i] = true; checkSc(); } }
+      };
+      cv.addEventListener('mousedown', e => { dr = true; scratch(e) });
+      cv.addEventListener('mousemove', scratch);
+      cv.addEventListener('mouseup', () => dr = false);
+      cv.addEventListener('touchstart', e => { dr = true; scratch(e) }, { passive: false });
+      cv.addEventListener('touchmove', scratch, { passive: false });
+      cv.addEventListener('touchend', () => dr = false);
+    }
+    function checkSc() {
+      if (sc.every(Boolean)) {
+        setTimeout(() => {
+          document.getElementById('scratch-msg').classList.add('visible');
+          const inv = document.getElementById('invite-text');
+          if (inv) { inv.style.transition = 'none'; inv.style.visibility = 'visible'; inv.style.opacity = '1'; }
+          if (inv) { inv.style.visibility = 'visible'; inv.style.opacity = '1'; }
+          fireConfetti();
+          startDrawingAnimation();
+        }, 400);
+      }
+    }
+
+
+    function rrect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x+r, y);
+      ctx.lineTo(x+w-r, y);
+      ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+      ctx.lineTo(x+w, y+h-r);
+      ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+      ctx.lineTo(x+r, y+h);
+      ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+      ctx.lineTo(x, y+r);
+      ctx.quadraticCurveTo(x, y, x+r, y);
+      ctx.closePath();
+    }
+    function startDrawingAnimation() {
+      try {
+        const section = document.getElementById('dolna-canvas').parentElement;
+
+        ['dolna-canvas','dolna-swing-wrap','dolna-layer-1','dolna-layer-2','dolna-layer-3','dolna-video-wrap'].forEach(id => {
+          const el = document.getElementById(id); if (el) el.remove();
+        });
+
+        if (!document.getElementById('swing-style')) {
+          const s = document.createElement('style');
+          s.id = 'swing-style';
+          s.textContent = `
+            #dolna-video-wrap {
+              position: absolute;
+              inset: 0;
+              z-index: 1;
+              pointer-events: none;
+            }
+            #dolna-bg-video {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              object-position: center top;
+              opacity: 0;
+              transition: opacity 2s ease-in-out;
+            }
+          `;
+          document.head.appendChild(s);
+        }
+
+        const wrap = document.createElement('div');
+        wrap.id = 'dolna-video-wrap';
+
+        const video = document.createElement('video');
+        video.id = 'dolna-bg-video';
+        video.loop = true;
+        video.muted = true;
+        video.playsInline = true;
+        video.setAttribute('playsinline', '');
+        video.setAttribute('webkit-playsinline', '');
+
+        // Use external file — works on all browsers including mobile Safari
+        const source = document.createElement('source');
+        source.src = 'animation.mp4';
+        source.type = 'video/mp4';
+        video.appendChild(source);
+
+        wrap.appendChild(video);
+        section.insertBefore(wrap, section.firstChild);
+
+
+
+        video.addEventListener('canplay', function() {
+          video.play().catch(e => console.log('play error:', e));
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            video.style.opacity = '1';
+          }));
+        }, { once: true });
+
+        video.load();
+
+      } catch(e) { console.error('startDrawingAnimation:', e.message); }
+    }
+
+    function fireConfetti() {
+      const con = document.getElementById('confetti-container'); con.style.display = 'block';
+      const cols = ['#8B1A1A', '#C9A96E', '#5C0F0F', '#E8D5A3', '#A52020', '#FAF8F5'];
+      for (let i = 0; i < 120; i++) { const p = document.createElement('div'); p.className = 'confetti-piece'; p.style.cssText = `left:${Math.random() * 100}%;background:${cols[~~(Math.random() * cols.length)]};width:${4 + Math.random() * 8}px;height:${8 + Math.random() * 12}px;border-radius:${Math.random() > .5 ? '50%' : '2px'};animation-duration:${2 + Math.random() * 3}s;animation-delay:${Math.random() * 1.5}s;`; con.appendChild(p); }
+      setTimeout(() => { con.style.display = 'none'; con.innerHTML = ''; }, 6000);
+    }
+    // Defer so all 3 cards are fully laid out before reading sizes
+    setTimeout(() => { initScratch(0); initScratch(1); initScratch(2); }, 100);
+  </script>
+</body>
+
+</html>
