@@ -103,36 +103,62 @@
       transition: opacity 0.45s ease, transform 0.45s ease;
       will-change: transform, opacity;
     }
+
     /* Fabric compression ring — shows stamp is pressing INTO the curtain */
-    
+
     #wax-stamp svg {
       display: block;
       /* Stamp sits on the fabric — shadow goes DOWN, not outward */
 
     }
+
     #wax-stamp:hover {
       transform: translate(-50%, -50%) rotate(-4deg) scale(1.03);
     }
+
     #wax-stamp.gone {
       opacity: 0;
       pointer-events: none;
       transform: translate(-50%, -50%) rotate(-4deg) scale(0.85);
     }
+
     /* Subtle very-slow sway — like curtain fabric moving slightly under it */
     @keyframes stampSway {
-      0%   { transform: translate(-50%, -50%) rotate(-4.5deg) translateY(0px); }
-      30%  { transform: translate(-50%, -50%) rotate(-3.8deg) translateY(-1.5px); }
-      70%  { transform: translate(-50%, -50%) rotate(-4.3deg) translateY(1px); }
-      100% { transform: translate(-50%, -50%) rotate(-4.5deg) translateY(0px); }
+      0% {
+        transform: translate(-50%, -50%) rotate(-4.5deg) translateY(0px);
+      }
+
+      30% {
+        transform: translate(-50%, -50%) rotate(-3.8deg) translateY(-1.5px);
+      }
+
+      70% {
+        transform: translate(-50%, -50%) rotate(-4.3deg) translateY(1px);
+      }
+
+      100% {
+        transform: translate(-50%, -50%) rotate(-4.5deg) translateY(0px);
+      }
     }
+
     @keyframes stampPress {
-      0%   { transform: translate(-50%, -50%) rotate(-4deg) scale(1); }
-      35%  { transform: translate(-50%, -50%) rotate(-4deg) scale(0.92); }
-      100% { transform: translate(-50%, -50%) rotate(-4deg) scale(0.92); }
+      0% {
+        transform: translate(-50%, -50%) rotate(-4deg) scale(1);
+      }
+
+      35% {
+        transform: translate(-50%, -50%) rotate(-4deg) scale(0.92);
+      }
+
+      100% {
+        transform: translate(-50%, -50%) rotate(-4deg) scale(0.92);
+      }
     }
+
     #wax-stamp:not(.gone):not(.pressing) {
       animation: stampSway 6s ease-in-out infinite;
     }
+
     #wax-stamp.pressing {
       animation: stampPress 0.28s ease forwards;
     }
@@ -146,6 +172,7 @@
       padding-left: max(52px, env(safe-area-inset-left));
       padding-right: max(52px, env(safe-area-inset-right));
     }
+
     @media (min-width: 540px) {
       #invitation {
         padding-left: 0;
@@ -223,6 +250,7 @@
       opacity: 0;
       visibility: hidden;
     }
+
     #invite-text.shown {
       opacity: 1 !important;
       visibility: visible !important;
@@ -293,6 +321,7 @@
       position: relative;
       overflow: hidden
     }
+
     #dolna-canvas {
       position: absolute;
       inset: 0;
@@ -301,14 +330,22 @@
       object-fit: cover;
     }
 
-    
-      50%  { transform: rotate(7deg); }
-      100% { transform: rotate(-7deg); }
+
+    50% {
+      transform: rotate(7deg);
+    }
+
+    100% {
+      transform: rotate(-7deg);
+    }
     }
 
     .scratch-overlay {
       position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       z-index: 10;
       display: flex;
       flex-direction: column;
@@ -317,6 +354,7 @@
       pointer-events: none;
       padding: 0 24px;
     }
+
     .invite-text {
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.05rem;
@@ -325,11 +363,13 @@
       text-align: center;
       line-height: 1.8;
       margin-top: 20px;
-      text-shadow: 0 1px 8px rgba(255,250,245,0.95);
+      text-shadow: 0 1px 8px rgba(255, 250, 245, 0.95);
     }
+
     .invite-text strong {
       color: var(--crimson-dark);
     }
+
     .scratch-overlay .scratch-cards {
       pointer-events: all;
     }
@@ -343,7 +383,7 @@
       margin-bottom: 2px;
       text-align: center;
       width: 100%;
-      text-shadow: 0 1px 10px rgba(255,250,245,1), 0 0 20px rgba(255,255,255,0.8);
+      text-shadow: 0 1px 10px rgba(255, 250, 245, 1), 0 0 20px rgba(255, 255, 255, 0.8);
     }
 
     .reveal-sub {
@@ -355,7 +395,7 @@
       margin-bottom: 10px;
       text-align: center;
       width: 100%;
-      text-shadow: 0 0 12px rgba(255,255,255,0.9);
+      text-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
     }
 
     .scratch-cards {
@@ -380,7 +420,7 @@
     .scratch-reveal {
       position: absolute;
       inset: 0;
-      background: rgba(250,245,238,0.92);
+      background: rgba(250, 245, 238, 0.92);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -442,14 +482,15 @@
       }
     }
 
-    
-    
-    
+
+
+
 
     .scratch-done-msg {
       position: absolute;
       bottom: 8%;
-      left: 0; right: 0;
+      left: 0;
+      right: 0;
       padding: 0 24px;
       text-align: center;
       opacity: 0;
@@ -526,18 +567,21 @@
       flex-direction: column;
       align-items: center;
     }
+
     .parents-invite-divider {
       width: 72px;
       height: 1px;
       background: linear-gradient(to right, transparent, var(--gold), transparent);
       margin: 0 auto 26px;
     }
+
     .parents-invite-divider-bottom {
       width: 72px;
       height: 1px;
       background: linear-gradient(to right, transparent, var(--gold), transparent);
       margin: 26px auto 0;
     }
+
     .parents-invite-label {
       font-family: 'Cinzel', serif;
       font-size: .55rem;
@@ -546,6 +590,7 @@
       text-transform: uppercase;
       margin-bottom: 20px;
     }
+
     .parents-invite-body {
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.1rem;
@@ -554,6 +599,7 @@
       line-height: 2.1;
       max-width: 300px;
     }
+
     .parents-invite-body strong {
       color: var(--crimson-dark);
       font-weight: 600;
@@ -669,8 +715,9 @@
   <div id="click-catcher" class="done"></div>
   <canvas id="cv-left"></canvas>
   <canvas id="cv-right"></canvas>
-  <canvas id="cv-left-still"  style="position:fixed;top:0;left:0;z-index:81;pointer-events:none;opacity:0"></canvas>
-  <canvas id="cv-right-still" style="position:fixed;top:0;left:0;z-index:81;pointer-events:none;opacity:0;width:100%"></canvas>
+  <canvas id="cv-left-still" style="position:fixed;top:0;left:0;z-index:81;pointer-events:none;opacity:0"></canvas>
+  <canvas id="cv-right-still"
+    style="position:fixed;top:0;left:0;z-index:81;pointer-events:none;opacity:0;width:100%"></canvas>
 
   <!-- Pelmet — fixed gold-trimmed top rod -->
   <svg id="pelmet" viewBox="0 0 1000 58" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -702,93 +749,96 @@
 
   <!-- Wax Seal Stamp -->
   <div id="wax-stamp" onclick="this.classList.add('pressing'); setTimeout(openCurtain, 320);">
-    <svg width="210" height="215" viewBox="0 0 210 215" xmlns="http://www.w3.org/2000/svg" style="overflow:hidden;display:block">
+    <svg width="210" height="215" viewBox="0 0 210 215" xmlns="http://www.w3.org/2000/svg"
+      style="overflow:hidden;display:block">
       <defs>
 
         <!-- === GRADIENTS FOR LAYERED LIGHTING === -->
 
         <!-- Base wax colour — very dark wine, almost black at edge -->
         <radialGradient id="g-base" cx="50%" cy="48%" r="55%">
-          <stop offset="0%"   stop-color="#8C1420"/>
-          <stop offset="45%"  stop-color="#6B0E18"/>
-          <stop offset="80%"  stop-color="#420810"/>
-          <stop offset="100%" stop-color="#220308"/>
+          <stop offset="0%" stop-color="#8C1420" />
+          <stop offset="45%" stop-color="#6B0E18" />
+          <stop offset="80%" stop-color="#420810" />
+          <stop offset="100%" stop-color="#220308" />
         </radialGradient>
 
         <!-- Raised rim lighting: the thick outer edge catches top-left light -->
         <!-- Real wax: the rim is raised, so it intercepts light BEFORE the center -->
         <!-- We fake this: brighter ring at edge fading inward -->
         <radialGradient id="g-rim-light" cx="35%" cy="30%" r="75%">
-          <stop offset="0%"   stop-color="rgba(0,0,0,0)"/>
-          <stop offset="55%"  stop-color="rgba(0,0,0,0)"/>
-          <stop offset="72%"  stop-color="rgba(160,40,50,0.35)"/>
-          <stop offset="83%"  stop-color="rgba(210,70,70,0.55)"/>
-          <stop offset="90%"  stop-color="rgba(180,50,55,0.30)"/>
-          <stop offset="100%" stop-color="rgba(60,5,10,0.20)"/>
+          <stop offset="0%" stop-color="rgba(0,0,0,0)" />
+          <stop offset="55%" stop-color="rgba(0,0,0,0)" />
+          <stop offset="72%" stop-color="rgba(160,40,50,0.35)" />
+          <stop offset="83%" stop-color="rgba(210,70,70,0.55)" />
+          <stop offset="90%" stop-color="rgba(180,50,55,0.30)" />
+          <stop offset="100%" stop-color="rgba(60,5,10,0.20)" />
         </radialGradient>
 
         <!-- Rim shadow: bottom-right of the raised rim falls INTO shadow -->
         <radialGradient id="g-rim-shadow" cx="68%" cy="72%" r="60%">
-          <stop offset="0%"   stop-color="rgba(0,0,0,0)"/>
-          <stop offset="50%"  stop-color="rgba(0,0,0,0)"/>
-          <stop offset="72%"  stop-color="rgba(0,0,0,0.25)"/>
-          <stop offset="85%"  stop-color="rgba(0,0,0,0.60)"/>
-          <stop offset="100%" stop-color="rgba(0,0,0,0.50)"/>
+          <stop offset="0%" stop-color="rgba(0,0,0,0)" />
+          <stop offset="50%" stop-color="rgba(0,0,0,0)" />
+          <stop offset="72%" stop-color="rgba(0,0,0,0.25)" />
+          <stop offset="85%" stop-color="rgba(0,0,0,0.60)" />
+          <stop offset="100%" stop-color="rgba(0,0,0,0.50)" />
         </radialGradient>
 
         <!-- Center flat area (where stamp pressed it flat) -->
         <!-- Slightly darker than the rim because it's recessed -->
         <radialGradient id="g-center" cx="40%" cy="36%" r="50%">
-          <stop offset="0%"   stop-color="rgba(170,45,55,0.55)"/>
-          <stop offset="50%"  stop-color="rgba(90,15,25,0.30)"/>
-          <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+          <stop offset="0%" stop-color="rgba(170,45,55,0.55)" />
+          <stop offset="50%" stop-color="rgba(90,15,25,0.30)" />
+          <stop offset="100%" stop-color="rgba(0,0,0,0)" />
         </radialGradient>
 
         <!-- KEY specular: tight bright spot top-left — light glancing off raised rim -->
         <radialGradient id="g-spec" cx="28%" cy="22%" r="18%">
-          <stop offset="0%"   stop-color="rgba(255,200,185,0.80)"/>
-          <stop offset="45%"  stop-color="rgba(240,130,110,0.30)"/>
-          <stop offset="100%" stop-color="rgba(200,60,50,0)"/>
+          <stop offset="0%" stop-color="rgba(255,200,185,0.80)" />
+          <stop offset="45%" stop-color="rgba(240,130,110,0.30)" />
+          <stop offset="100%" stop-color="rgba(200,60,50,0)" />
         </radialGradient>
 
         <!-- Secondary softer fill light (bounce from below-right) -->
         <radialGradient id="g-fill" cx="75%" cy="80%" r="40%">
-          <stop offset="0%"   stop-color="rgba(140,30,40,0.20)"/>
-          <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+          <stop offset="0%" stop-color="rgba(140,30,40,0.20)" />
+          <stop offset="100%" stop-color="rgba(0,0,0,0)" />
         </radialGradient>
 
         <!-- The thick SIDE of the wax — the wall you see around the edge -->
         <!-- Lit from top-left: left/top side of wall is lighter, right/bottom darker -->
         <linearGradient id="g-side" x1="20%" y1="15%" x2="80%" y2="88%">
-          <stop offset="0%"   stop-color="#7A1020"/>
-          <stop offset="35%"  stop-color="#480A14"/>
-          <stop offset="70%"  stop-color="#280508"/>
-          <stop offset="100%" stop-color="#0E0102"/>
+          <stop offset="0%" stop-color="#7A1020" />
+          <stop offset="35%" stop-color="#480A14" />
+          <stop offset="70%" stop-color="#280508" />
+          <stop offset="100%" stop-color="#0E0102" />
         </linearGradient>
 
         <!-- Contact shadow: tight, dark, hugs the base -->
         <filter id="f-contact" x="-25%" y="-20%" width="155%" height="155%">
-          <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="b"/>
-          <feOffset in="b" dx="3" dy="7" result="s"/>
-          <feColorMatrix in="s" type="matrix"
-            values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.88 0" result="sh"/>
-          <feMerge><feMergeNode in="sh"/><feMergeNode in="SourceGraphic"/></feMerge>
+          <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="b" />
+          <feOffset in="b" dx="3" dy="7" result="s" />
+          <feColorMatrix in="s" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.88 0" result="sh" />
+          <feMerge>
+            <feMergeNode in="sh" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
         </filter>
 
         <!-- Inner drop shadow — bounded to SVG, no bleed -->
         <filter id="innerShadow" x="0%" y="0%" width="115%" height="120%">
-          <feDropShadow dx="3" dy="7" stdDeviation="7"
-                        flood-color="rgba(0,0,0,0.65)"/>
+          <feDropShadow dx="3" dy="7" stdDeviation="7" flood-color="rgba(0,0,0,0.65)" />
         </filter>
 
         <!-- Clip to the organic blob shape -->
         <clipPath id="c-wax">
-          <path d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"/>
+          <path
+            d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z" />
         </clipPath>
 
         <!-- Clip to inner embossed area (smaller, centered) -->
         <clipPath id="c-inner">
-          <circle cx="95" cy="95" r="58"/>
+          <circle cx="95" cy="95" r="58" />
         </clipPath>
 
       </defs>
@@ -797,113 +847,98 @@
       <!-- LAYER 1: WAX THICKNESS — the side wall -->
       <!-- Offset slightly down+right from top surface = visible side edge -->
       <g filter="url(#innerShadow)">
-      <path d="M 107,21 C 127,18 150,24 165,41 C 174,51 178,61 180,73 C 182,84 179,93 176,99 C 187,106 189,118 183,128 C 177,139 164,144 157,147 C 160,158 155,168 145,174 C 135,180 122,181 112,178 C 105,184 95,188 84,186 C 72,184 62,177 57,169 C 48,171 37,169 29,161 C 20,153 17,140 21,129 C 14,121 10,110 12,98 C 14,86 21,76 29,70 C 24,60 24,48 32,39 C 40,30 53,26 65,27 C 72,19 82,14 94,14 C 100,14 104,17 107,21 Z"
-            fill="url(#g-side)"/>
+        <path
+          d="M 107,21 C 127,18 150,24 165,41 C 174,51 178,61 180,73 C 182,84 179,93 176,99 C 187,106 189,118 183,128 C 177,139 164,144 157,147 C 160,158 155,168 145,174 C 135,180 122,181 112,178 C 105,184 95,188 84,186 C 72,184 62,177 57,169 C 48,171 37,169 29,161 C 20,153 17,140 21,129 C 14,121 10,110 12,98 C 14,86 21,76 29,70 C 24,60 24,48 32,39 C 40,30 53,26 65,27 C 72,19 82,14 94,14 C 100,14 104,17 107,21 Z"
+          fill="url(#g-side)" />
       </g>
 
       <!-- ============================================ -->
       <!-- LAYER 2: TOP WAX SURFACE — 5 lighting passes -->
 
       <!-- 2a. Base colour -->
-      <path d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
-            fill="url(#g-base)"/>
+      <path
+        d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
+        fill="url(#g-base)" />
 
       <!-- 2b. Raised rim lighting — brighter ring around edge where light hits the thick rim -->
-      <path d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
-            fill="url(#g-rim-light)" clip-path="url(#c-wax)"/>
+      <path
+        d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
+        fill="url(#g-rim-light)" clip-path="url(#c-wax)" />
 
       <!-- 2c. Rim shadow — bottom-right of raised rim in shadow -->
-      <path d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
-            fill="url(#g-rim-shadow)" clip-path="url(#c-wax)"/>
+      <path
+        d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
+        fill="url(#g-rim-shadow)" clip-path="url(#c-wax)" />
 
       <!-- 2d. Center diffuse — the flat pressed center area, slight top-left light -->
-      <path d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
-            fill="url(#g-center)" clip-path="url(#c-wax)"/>
+      <path
+        d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
+        fill="url(#g-center)" clip-path="url(#c-wax)" />
 
       <!-- 2e. Specular highlight — tight glint top-left, where rim is highest + faces light -->
-      <path d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
-            fill="url(#g-spec)" clip-path="url(#c-wax)"/>
+      <path
+        d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
+        fill="url(#g-spec)" clip-path="url(#c-wax)" />
 
       <!-- 2f. Fill light — soft warmth bottom-right, prevents it going pure black -->
-      <path d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
-            fill="url(#g-fill)" clip-path="url(#c-wax)"/>
+      <path
+        d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
+        fill="url(#g-fill)" clip-path="url(#c-wax)" />
 
       <!-- ============================================ -->
       <!-- LAYER 3: EMBOSSED BORDER RING -->
       <!-- The groove: stamped INTO the flat center — dark deep trough -->
-      <circle cx="95" cy="95" r="62" fill="none"
-              stroke="rgba(8,0,2,0.90)" stroke-width="8"
-              clip-path="url(#c-wax)"/>
+      <circle cx="95" cy="95" r="62" fill="none" stroke="rgba(8,0,2,0.90)" stroke-width="8" clip-path="url(#c-wax)" />
       <!-- Top-left arc of groove: catches light on its inner raised wall -->
-      <circle cx="95" cy="95" r="62" fill="none"
-              stroke="rgba(190,80,65,0.50)" stroke-width="1.8"
-              stroke-dasharray="110 290"
-              stroke-dashoffset="42"
-              clip-path="url(#c-wax)"/>
+      <circle cx="95" cy="95" r="62" fill="none" stroke="rgba(190,80,65,0.50)" stroke-width="1.8"
+        stroke-dasharray="110 290" stroke-dashoffset="42" clip-path="url(#c-wax)" />
       <!-- Bottom-right groove wall: in shadow -->
-      <circle cx="95" cy="95" r="58" fill="none"
-              stroke="rgba(0,0,0,0.45)" stroke-width="3"
-              stroke-dasharray="160 240"
-              stroke-dashoffset="215"
-              clip-path="url(#c-wax)"/>
+      <circle cx="95" cy="95" r="58" fill="none" stroke="rgba(0,0,0,0.45)" stroke-width="3" stroke-dasharray="160 240"
+        stroke-dashoffset="215" clip-path="url(#c-wax)" />
 
       <!-- ============================================ -->
       <!-- LAYER 4: LETTERS — pressed (recessed) into the wax center -->
       <!-- Recessed = darker than surface, with top-left highlight on stroke walls -->
 
       <!-- R shadow (the depth of the pressed groove) -->
-      <text x="92" y="103"
-        font-family="Cormorant Garamond, Georgia, serif"
-        font-size="88" font-style="italic" font-weight="400"
-        fill="rgba(12,1,3,0.88)"
-        text-anchor="middle" dominant-baseline="middle"
+      <text x="92" y="103" font-family="Cormorant Garamond, Georgia, serif" font-size="88" font-style="italic"
+        font-weight="400" fill="rgba(12,1,3,0.88)" text-anchor="middle" dominant-baseline="middle"
         clip-path="url(#c-inner)">R</text>
       <!-- R highlight (top-left wall of the groove catches light) -->
-      <text x="90" y="101"
-        font-family="Cormorant Garamond, Georgia, serif"
-        font-size="88" font-style="italic" font-weight="400"
-        fill="rgba(185,75,65,0.30)"
-        text-anchor="middle" dominant-baseline="middle"
+      <text x="90" y="101" font-family="Cormorant Garamond, Georgia, serif" font-size="88" font-style="italic"
+        font-weight="400" fill="rgba(185,75,65,0.30)" text-anchor="middle" dominant-baseline="middle"
         clip-path="url(#c-inner)">R</text>
 
       <!-- T shadow -->
-      <text x="110" y="99"
-        font-family="Cormorant Garamond, Georgia, serif"
-        font-size="54" font-style="italic" font-weight="400"
-        fill="rgba(12,1,3,0.82)"
-        text-anchor="middle" dominant-baseline="middle"
+      <text x="110" y="99" font-family="Cormorant Garamond, Georgia, serif" font-size="54" font-style="italic"
+        font-weight="400" fill="rgba(12,1,3,0.82)" text-anchor="middle" dominant-baseline="middle"
         clip-path="url(#c-inner)">T</text>
       <!-- T highlight -->
-      <text x="108" y="97"
-        font-family="Cormorant Garamond, Georgia, serif"
-        font-size="54" font-style="italic" font-weight="400"
-        fill="rgba(185,75,65,0.25)"
-        text-anchor="middle" dominant-baseline="middle"
+      <text x="108" y="97" font-family="Cormorant Garamond, Georgia, serif" font-size="54" font-style="italic"
+        font-weight="400" fill="rgba(185,75,65,0.25)" text-anchor="middle" dominant-baseline="middle"
         clip-path="url(#c-inner)">T</text>
 
       <!-- ============================================ -->
       <!-- LAYER 5: SURFACE IMPERFECTIONS -->
       <!-- Real wax is not smooth — has micro bumps, streaks, trapped air bubbles -->
       <!-- Top-left: a streak of slightly lighter wax (air bubble trail) -->
-      <ellipse cx="70" cy="58" rx="18" ry="6" transform="rotate(-28 70 58)"
-               fill="rgba(200,80,65,0.08)" clip-path="url(#c-wax)"/>
+      <ellipse cx="70" cy="58" rx="18" ry="6" transform="rotate(-28 70 58)" fill="rgba(200,80,65,0.08)"
+        clip-path="url(#c-wax)" />
       <!-- Bottom-right: slightly darker pooled area -->
-      <ellipse cx="122" cy="132" rx="15" ry="8" transform="rotate(18 122 132)"
-               fill="rgba(0,0,0,0.09)" clip-path="url(#c-wax)"/>
+      <ellipse cx="122" cy="132" rx="15" ry="8" transform="rotate(18 122 132)" fill="rgba(0,0,0,0.09)"
+        clip-path="url(#c-wax)" />
       <!-- Small bright speck — trapped air bubble at surface -->
-      <ellipse cx="60" cy="72" rx="4" ry="2.5" transform="rotate(-15 60 72)"
-               fill="rgba(255,210,185,0.18)" clip-path="url(#c-wax)"/>
+      <ellipse cx="60" cy="72" rx="4" ry="2.5" transform="rotate(-15 60 72)" fill="rgba(255,210,185,0.18)"
+        clip-path="url(#c-wax)" />
 
       <!-- ============================================ -->
       <!-- LAYER 6: OUTER RIM CATCHLIGHT -->
       <!-- The very top-left edge of the thick wax catches a thin line of bright light -->
       <!-- This is what makes it look like it has PHYSICAL THICKNESS vs a flat sticker -->
-      <path d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
-            fill="none"
-            stroke="rgba(215,100,80,0.45)" stroke-width="2.5"
-            stroke-dasharray="95 999"
-            stroke-dashoffset="0"
-            clip-path="url(#c-wax)"/>
+      <path
+        d="M 105,15 C 125,12 148,18 163,35 C 172,45 176,55 178,67 C 180,78 177,87 174,93 C 185,100 187,112 181,122 C 175,133 162,138 155,141 C 158,152 153,162 143,168 C 133,174 120,175 110,172 C 103,178 93,182 82,180 C 70,178 60,171 55,163 C 46,165 35,163 27,155 C 18,147 15,134 19,123 C 12,115 8,104 10,92 C 12,80 19,70 27,64 C 22,54 22,42 30,33 C 38,24 51,20 63,21 C 70,13 80,8 92,8 C 98,8 102,11 105,15 Z"
+        fill="none" stroke="rgba(215,100,80,0.45)" stroke-width="2.5" stroke-dasharray="95 999" stroke-dashoffset="0"
+        clip-path="url(#c-wax)" />
 
     </svg>
   </div>
@@ -912,7 +947,7 @@
 
   <div id="invitation">
     <section class="names-section">
-      <p class="names-pre">Together with their families<br>cordially invite you to celebrate</p>
+      <p class="names-pre"><i>"And We created you in pairs"(78:8)</i></p>
       <div class="couple-names">
         <span class="name-groom">Fazla Rabbi Rahul</span>
         <span class="name-ampersand">&amp;</span>
@@ -921,32 +956,33 @@
       <p class="invite-text">We would like to invite you to celebrate<br>the most special day of our lives.<br>It would
         be an honor to have you<br>present at this important moment.</p>
       <div class="scroll-cue"><span></span>
-        <div class="scroll-arrow"></div>
+
       </div>
     </section>
 
     <section class="scratch-section">
-      <canvas id="dolna-canvas" width="400" height="600" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity 0.5s"></canvas>
+      <canvas id="dolna-canvas" width="400" height="600"
+        style="position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity 0.5s"></canvas>
       <div class="scratch-overlay">
-      <p class="reveal-label">Reveal</p>
-      <p class="reveal-sub">Scratch to discover the date</p>
-      <div class="scratch-cards">
-        <div class="scratch-card" id="card-0">
-          <div class="scratch-reveal"><span class="reveal-number">13</span><span class="reveal-word">Day</span></div>
-          <canvas class="scratch-canvas" id="canvas-0" width="70" height="70"></canvas>
+        <p class="reveal-label">Reveal</p>
+        <p class="reveal-sub">Scratch to discover the date</p>
+        <div class="scratch-cards">
+          <div class="scratch-card" id="card-0">
+            <div class="scratch-reveal"><span class="reveal-number">13</span><span class="reveal-word">Day</span></div>
+            <canvas class="scratch-canvas" id="canvas-0" width="70" height="70"></canvas>
+          </div>
+          <div class="scratch-card" id="card-1">
+            <div class="scratch-reveal"><span class="reveal-number" style="font-size:.85rem">june</span><span
+                class="reveal-word">Month</span></div><canvas class="scratch-canvas" id="canvas-1" width="100"
+              height="100"></canvas>
+          </div>
+          <div class="scratch-card" id="card-2">
+            <div class="scratch-reveal"><span class="reveal-number" style="font-size:.85rem">2026</span><span
+                class="reveal-word">Year</span></div><canvas class="scratch-canvas" id="canvas-2" width="100"
+              height="100"></canvas>
+          </div>
         </div>
-        <div class="scratch-card" id="card-1">
-          <div class="scratch-reveal"><span class="reveal-number" style="font-size:.85rem">june</span><span
-              class="reveal-word">Month</span></div><canvas class="scratch-canvas" id="canvas-1" width="100"
-            height="100"></canvas>
-        </div>
-        <div class="scratch-card" id="card-2">
-          <div class="scratch-reveal"><span class="reveal-number" style="font-size:.85rem">2026</span><span
-              class="reveal-word">Year</span></div><canvas class="scratch-canvas" id="canvas-2" width="100"
-            height="100"></canvas>
-        </div>
-      </div>
-      <div class="scratch-done-msg" id="scratch-msg"></div>
+        <div class="scratch-done-msg" id="scratch-msg"></div>
       </div>
     </section>
 
@@ -1051,8 +1087,8 @@
       <div class="parents-invite-divider"></div>
       <p class="parents-invite-label">With Warmest Love</p>
       <p class="parents-invite-body">
-        With hearts full of love and joy,<br>
-        we,<br> <strong>Chowdhury Nasir &amp; Mostary Begum</strong>,<br>
+        With hearts full of love and joy,
+        we, <strong>Chowdhury Nasir &amp; Mostary Begum</strong>,<br>
         warmly invite you to witness<br>
         the beautiful union of our<br>
         beloved daughter and<br>
@@ -1122,11 +1158,11 @@
     let H = window.innerHeight;
 
     const cvL = document.getElementById('cv-left');
-    const cvR  = document.getElementById('cv-right');
+    const cvR = document.getElementById('cv-right');
     const cvLS = document.getElementById('cv-left-still');
     const cvRS = document.getElementById('cv-right-still');
-    const ctxL  = cvL.getContext('2d');
-    const ctxR  = cvR.getContext('2d');
+    const ctxL = cvL.getContext('2d');
+    const ctxR = cvR.getContext('2d');
     const ctxLS = cvLS.getContext('2d');
     const ctxRS = cvRS.getContext('2d');
 
@@ -1653,11 +1689,11 @@
         function fadeStep(ts) {
           if (!fadeStart) fadeStart = ts;
           const t = Math.min((ts - fadeStart) / FADE_MS, 1);
-          const ease = t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2;
+          const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
           cvLS.style.opacity = ease.toFixed(4);
           cvRS.style.opacity = ease.toFixed(4);
-          cvL.style.opacity  = (1-ease).toFixed(4);
-          cvR.style.opacity  = (1-ease).toFixed(4);
+          cvL.style.opacity = (1 - ease).toFixed(4);
+          cvR.style.opacity = (1 - ease).toFixed(4);
           jiggleT += 0.007;
           drawStaticCurtain(ctxLS, true, jiggleT);
           drawStaticCurtain(ctxRS, false, jiggleT);
@@ -1715,15 +1751,15 @@
       c.fillStyle = '#B8923A';
       c.fillRect(0, 0, size, size);
       // Clip to circle
-      c.save(); c.beginPath(); c.arc(cx, cy, r, 0, Math.PI*2); c.clip();
+      c.save(); c.beginPath(); c.arc(cx, cy, r, 0, Math.PI * 2); c.clip();
       // Gradient shimmer
-      const g = c.createRadialGradient(cx*0.7, cy*0.7, 2, cx, cy, r);
+      const g = c.createRadialGradient(cx * 0.7, cy * 0.7, 2, cx, cy, r);
       g.addColorStop(0, '#F0E0A0'); g.addColorStop(0.3, '#D4AA55');
       g.addColorStop(0.7, '#B8923A'); g.addColorStop(1, '#8A6820');
       c.fillStyle = g; c.fillRect(0, 0, size, size);
       // Shine lines
       c.strokeStyle = 'rgba(255,255,255,0.25)'; c.lineWidth = 1.5;
-      for (let j = 0; j < 8; j++) { const a = j/8*Math.PI*2; c.beginPath(); c.moveTo(cx,cy); c.lineTo(cx+Math.cos(a)*(r-4), cy+Math.sin(a)*(r-4)); c.stroke(); }
+      for (let j = 0; j < 8; j++) { const a = j / 8 * Math.PI * 2; c.beginPath(); c.moveTo(cx, cy); c.lineTo(cx + Math.cos(a) * (r - 4), cy + Math.sin(a) * (r - 4)); c.stroke(); }
       c.restore();
       c.globalCompositeOperation = 'destination-out';
       let dr = false, cl = false;
@@ -1733,7 +1769,7 @@
       };
       const scratch = e => {
         if (!dr) return; e.preventDefault();
-        const p = pos(e); c.beginPath(); c.arc(p.x, p.y, size*0.16, 0, Math.PI * 2); c.fill();
+        const p = pos(e); c.beginPath(); c.arc(p.x, p.y, size * 0.16, 0, Math.PI * 2); c.fill();
         if (!cl) { const d = c.getImageData(0, 0, size, size).data; let k = 0; for (let j = 3; j < d.length; j += 4)if (d[j] === 0) k++; if (k / (d.length / 4) > 0.55) { cl = true; cv.style.transition = 'opacity 0.6s'; cv.style.opacity = '0'; cv.style.pointerEvents = 'none'; sc[i] = true; checkSc(); } }
       };
       cv.addEventListener('mousedown', e => { dr = true; scratch(e) });
@@ -1756,22 +1792,22 @@
 
     function rrect(ctx, x, y, w, h, r) {
       ctx.beginPath();
-      ctx.moveTo(x+r, y);
-      ctx.lineTo(x+w-r, y);
-      ctx.quadraticCurveTo(x+w, y, x+w, y+r);
-      ctx.lineTo(x+w, y+h-r);
-      ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
-      ctx.lineTo(x+r, y+h);
-      ctx.quadraticCurveTo(x, y+h, x, y+h-r);
-      ctx.lineTo(x, y+r);
-      ctx.quadraticCurveTo(x, y, x+r, y);
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
       ctx.closePath();
     }
     function startDrawingAnimation() {
       try {
         const section = document.getElementById('dolna-canvas').parentElement;
 
-        ['dolna-canvas','dolna-swing-wrap','dolna-layer-1','dolna-layer-2','dolna-layer-3','dolna-video-wrap'].forEach(id => {
+        ['dolna-canvas', 'dolna-swing-wrap', 'dolna-layer-1', 'dolna-layer-2', 'dolna-layer-3', 'dolna-video-wrap'].forEach(id => {
           const el = document.getElementById(id); if (el) el.remove();
         });
 
@@ -1819,7 +1855,7 @@
 
 
 
-        video.addEventListener('canplay', function() {
+        video.addEventListener('canplay', function () {
           video.play().catch(e => console.log('play error:', e));
           requestAnimationFrame(() => requestAnimationFrame(() => {
             video.style.opacity = '1';
@@ -1828,7 +1864,7 @@
 
         video.load();
 
-      } catch(e) { console.error('startDrawingAnimation:', e.message); }
+      } catch (e) { console.error('startDrawingAnimation:', e.message); }
     }
 
     function fireConfetti() {
